@@ -411,5 +411,5 @@ if __name__ == "__main__":
     print("Total queries: ", len(queries))
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    run_all_queries(T, queries)
-    # transpile_all(T, queries)
+    #run_all_queries(T, queries)
+    transpile_all(T, queries)
