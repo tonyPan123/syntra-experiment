@@ -84,6 +84,8 @@ public:
     }
   }
 
+  const std::string & end() const { return queue_.back().what; }
+
   const std::string & front() const { return queue_.front().what; }
   void pop() { queue_.pop_front(); }
   size_t size() const { return queue_.size(); }

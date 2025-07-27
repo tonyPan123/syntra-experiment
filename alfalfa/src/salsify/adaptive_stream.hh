@@ -7,6 +7,7 @@
 #include <thread>
 #include <future>
 #include <chrono>
+//#include <boost>
 
 #include "yuv4mpeg.hh"
 #include "packet.hh"
@@ -54,11 +55,13 @@ EncodeOutput do_encode_job( EncodeJob && encode_job )
 {
     std::vector<uint8_t> output;
     uint32_t source_minihash = encode_job.encoder.minihash();
-
-    output = encode_job.encoder.encode_with_target_size( encode_job.raster.get(),
+    //if (encode_job.target_size >= 5000) {
+        output = encode_job.encoder.encode_with_target_size( encode_job.raster.get(),
                                                         encode_job.target_size );
-    //output = encode_job.encoder.encode_with_quantizer( encode_job.raster.get(),
-    //                                                    3 );
+    //} else {
+    //    output = encode_job.encoder.encode_with_quantizer( encode_job.raster.get(),
+    //                                                    100 );
+    //}
     return { move( encode_job.encoder ), move( output ), source_minihash, encode_job.timestamp};
 }
 
@@ -96,15 +99,24 @@ class ABR {
 
         bool stop_encode;
 
+        boost::circular_buffer<Encoder> past_encoders;
+
+        FECPacket latest_pkt;
+
         ABR(uint16_t _conenction_id, Encoder & encoder_) 
             : encoder(move(encoder_)),
-              stop_encode(false)
+              stop_encode(false), 
+              past_encoders(4)
         {  
             connection_id = _conenction_id;
             frame_no = 0;
             for (unsigned i = 0; i < MAX_NUM_RTTS; i++) {
                 encoded_output_by_rtt[i] = FECPre{connection_id};
             }
+            past_encoders.push_back({ 1280, 720, false, REALTIME_QUALITY });
+            past_encoders.push_back({ 1280, 720, false, REALTIME_QUALITY });
+            past_encoders.push_back({ 1280, 720, false, REALTIME_QUALITY });
+            past_encoders.push_back({ 1280, 720, false, REALTIME_QUALITY });
         }
 
         void add_fetch_frame(IVFReader & reader) {
@@ -134,7 +146,8 @@ class ABR {
             for (RasterHandle & raster : fetched_frames) {
                 auto now = chrono::steady_clock::now();
                 uint32_t ms = chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
-                encode_jobs.emplace_back(raster, encoder, target_sizes / fetched_frames.size() /*TODO: change to min_c later */, ms);
+                //encode_jobs.emplace_back(raster, encoder, target_sizes / fetched_frames.size() /*TODO: change to min_c later */, ms);
+                encode_jobs.emplace_back(raster, past_encoders[past_encoders.size() - 1], target_sizes / fetched_frames.size() /*TODO: change to min_c later */, ms);
             }
             fetched_frames.clear();
 
@@ -212,7 +225,8 @@ class ABR {
             // The frames added into FECPre will be sent anyway
             encoded_output_by_rtt[MAX_NUM_RTTS - 1] = frames;
             if (good_outputs.size() > 0) {
-                encoder = move(good_outputs[ good_outputs.size() - 1 ].encoder);
+                past_encoders.push_back(move(good_outputs[ good_outputs.size() - 1 ].encoder));
+                //encoder = move(good_outputs[ good_outputs.size() - 1 ].encoder);
             }
             //good_outputs[ good_outputs.size() - 1 ].encoder.stats().ssim;
             // Sending behaviour and add FEC
@@ -222,19 +236,21 @@ class ABR {
             if ((pacer.size() + cc.beliefs.max_q) <= 2) {
                 if (encoded_output_by_rtt[0].initialized) {
                     if (encoded_output_by_rtt[1].initialized) {
-                        if (encoded_output_by_rtt[0].initialized <= cc.no_loss_rate &&
-                             (encoded_output_by_rtt[0].initialized + encoded_output_by_rtt[1].initialized) <= (2 * cc.beliefs.min_c - cc.beliefs.max_q) && 
-                               (encoded_output_by_rtt[0].initialized + encoded_output_by_rtt[1].initialized + encoded_output_by_rtt[2].initialized) <= (3 * cc.beliefs.min_c - cc.beliefs.max_q))
+                        if (encoded_output_by_rtt[0].total_len <= cc.no_loss_rate &&
+                             (encoded_output_by_rtt[0].total_len + encoded_output_by_rtt[1].total_len) <= (2 * cc.beliefs.min_c - cc.beliefs.max_q) && 
+                               (encoded_output_by_rtt[0].total_len + encoded_output_by_rtt[1].total_len + encoded_output_by_rtt[2].total_len) <= (3 * cc.beliefs.min_c - cc.beliefs.max_q))
                         status = PER_FRAME;  
                     }                 
                 } else {
                     if (encoded_output_by_rtt[1].initialized) {
-                        if ((encoded_output_by_rtt[0].initialized + encoded_output_by_rtt[1].initialized) <= (cc.beliefs.min_c + cc.no_loss_rate)) {
-                            status = MULTI_FRAME;
+                        if ((encoded_output_by_rtt[1].total_len + encoded_output_by_rtt[2].total_len) <= (cc.beliefs.min_c + cc.no_loss_rate)) {
+                            if ((encoded_output_by_rtt[1].total_len + encoded_output_by_rtt[2].total_len) <= (3 * cc.beliefs.min_c - cc.beliefs.max_q)) {
+                                status = MULTI_FRAME;
+                            }
                         }
                     } else {
                         if (encoded_output_by_rtt[2].initialized) {
-                            if ((encoded_output_by_rtt[0].initialized) <= (cc.no_loss_rate)) {
+                            if ((encoded_output_by_rtt[2].total_len) <= (cc.no_loss_rate)) {
                                 status = SINGLE_FRAME;
                             }
                         }
@@ -242,7 +258,7 @@ class ABR {
                 }
             }
 
-            if (cc.beliefs.max_c < cc.MAX_BANDWIDTH) {
+            if (cc.converged()) {
                 status = CONVERGED;
             }
 
@@ -343,7 +359,7 @@ class ABR {
                         for (FECPacket & pkt : fec_frame2.pkts) {
                             pacer.push( pkt.to_string(), pkt_interdelay);
                         }
-                        cout << "Action: Multi-frame Encoding probing min(c+b), frame_size1: " << encoded_output_by_rtt[0].total_len << " frame_size2: "<< encoded_output_by_rtt[1].total_len << " extra_fec for 1: " << extra_fec << endl;
+                        cout << "Action: Per-frame Encoding probing min(c+b), frame_size1: " << encoded_output_by_rtt[0].total_len << " frame_size2: "<< encoded_output_by_rtt[1].total_len << " extra_fec for 1: " << extra_fec << endl;
                         encoded_output_by_rtt[0] =  FECPre{connection_id};
                         encoded_output_by_rtt[1] =  FECPre{connection_id};
                     } else {
@@ -359,23 +375,23 @@ class ABR {
                         for (FECPacket & pkt : fec_frame2.pkts) {
                             pacer.push( pkt.to_string(), pkt_interdelay);
                         }
+                        cout << "Action: Per-frame Encoding probing min(c+b), frame_size1: " << encoded_output_by_rtt[0].total_len << " frame_size2: "<< encoded_output_by_rtt[1].total_len << " extra_fec for 1&2: " << extra_fec << endl;
                         encoded_output_by_rtt[0] =  FECPre{connection_id};
                         encoded_output_by_rtt[1] =  FECPre{connection_id};
-                        cout << "Action: Multi-frame Encoding probing min(c+b), frame_size1: " << encoded_output_by_rtt[0].total_len << " frame_size2: "<< encoded_output_by_rtt[1].total_len << " extra_fec for 1&2: " << extra_fec << endl;
                     }
 
                 } 
             } else if (status == DRAIN) {
                 // Check for stop encoding 
-                if ((encoded_output_by_rtt[0].total_len + encoded_output_by_rtt[1].total_len + encoded_output_by_rtt[2].total_len + pacer.size()) > 3 * cc.beliefs.min_c) {
+                if ((encoded_output_by_rtt[0].total_len + encoded_output_by_rtt[1].total_len + encoded_output_by_rtt[2].total_len + pacer.size()) > 2 * cc.beliefs.min_c) {
                     stop_encode = true;
                     cout << "Action: Stop encoding" << endl;
                 }
-
+                /*
                 if ((encoded_output_by_rtt[1].total_len + encoded_output_by_rtt[2].total_len + pacer.size()) > 2 * cc.beliefs.min_c) {
                     stop_encode = true;
                     cout << "Action: Stop encoding" << endl;
-                }
+                } */
 
                 if (encoded_output_by_rtt[0].initialized) {
                     FECPre & sum = encoded_output_by_rtt[0];
@@ -392,7 +408,7 @@ class ABR {
                 // TODO: When to sent encoded_output_by_rtt[1]
             } else {
                 // Check for stop encoding 
-                if (encoded_output_by_rtt[0].total_len > 0) {
+                /*if (encoded_output_by_rtt[0].total_len > 0) {
                     FECPre & sum = encoded_output_by_rtt[0];
                     fec_frame_no++;
                     FECFrame fec_frame {fec_frame_no, sum, 0};
@@ -416,7 +432,29 @@ class ABR {
                     }
                     cout << "Action: Converged, do eviction. frame_size: " << sum.total_len << endl;
                     encoded_output_by_rtt[1] =  FECPre{connection_id};
+                } */
+
+                if (encoded_output_by_rtt[0].total_len > 0 || encoded_output_by_rtt[1].total_len > 0) {
+                    if (encoded_output_by_rtt[2].total_len > 0) {
+                        //encoder = move(past_encoders.back());
+                        past_encoders.pop_back();
+                    }
+                    if (encoded_output_by_rtt[1].total_len > 0) {
+                        //if (encoded_output_by_rtt[0].total_len == 0) {
+                        //    encoder = move(past_encoders.back());
+                        //}
+                        past_encoders.pop_back();
+                    }
+                    if (encoded_output_by_rtt[0].total_len > 0) {
+                        //encoder = move(past_encoders.back());
+                        past_encoders.pop_back();
+                    }
+                    encoded_output_by_rtt[0] =  FECPre{connection_id};
+                    encoded_output_by_rtt[1] =  FECPre{connection_id};
+                    encoded_output_by_rtt[2] =  FECPre{connection_id};
+                    cout << "Action: Converged, do eviction." << endl;
                 }
+
 
                 if (encoded_output_by_rtt[2].total_len > 0) {
                     FECPre & sum = encoded_output_by_rtt[2];
@@ -427,7 +465,7 @@ class ABR {
                     fec_frame_no++;
                     FECFrame fec_frame {fec_frame_no, sum, extra_fec};
     
-                    int pkt_interdelay = (cc.beliefs.min_rtt * MILLI_TO_MICRO) / (cc.beliefs.min_c); 
+                    int pkt_interdelay = (cc.beliefs.min_rtt * MILLI_TO_MICRO) / (fec_frame.pkts.size()); 
                     for (FECPacket & pkt : fec_frame.pkts) {
                         pacer.push( pkt.to_string(), pkt_interdelay);
                     }
@@ -435,11 +473,24 @@ class ABR {
                     encoded_output_by_rtt[2] =  FECPre{connection_id};
                 }
 
-                if ((pacer.size() + cc.beliefs.max_q) > cc.beliefs.min_c + 1) {
+                if ((pacer.size() + cc.beliefs.max_q) > cc.beliefs.min_c * 1) {
                     stop_encode = true;
                     cout << "Action: Stop encoding" << endl;
                 }
                 //TODO: Consider allow 2 * min_c latency to account for single frame size fluctuation
+            }
+
+
+            if (pacer.empty()) {
+                // Need to send prob packets for detecting lost packets
+                if (latest_pkt.is_valid) {
+                    //pacer.push(latest_pkt.to_string(), 0);
+                    latest_pkt.pkt_no_ += 1;
+                }
+                
+            } else {
+                latest_pkt = FECPacket{pacer.end()} ;
+                latest_pkt.pkt_no_ += 1;
             }
 
             /*

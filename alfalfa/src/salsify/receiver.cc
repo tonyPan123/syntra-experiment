@@ -10,6 +10,7 @@
 #include <thread>
 #include <condition_variable>
 #include <future>
+#include <boost/circular_buffer.hpp>
 
 #include "socket.hh"
 #include "packet.hh"
@@ -113,6 +114,12 @@ int main()
 
   ConcurrentQueue<FECPacket> pkts;
 
+  boost::circular_buffer<uint32_t> past_source_state{3};
+  past_source_state.push_back(current_state);
+  past_source_state.push_back(current_state);
+  past_source_state.push_back(current_state);
+
+
   Poller poller;
   poller.add_action( Poller::Action( socket, Direction::In,
     [&]()
@@ -137,14 +144,18 @@ int main()
   );
 
   // Make sure decoder works serially 
-  thread([&frames, &pkts, &decoders]() {
+  thread([&frames, &pkts, &decoders, &past_source_state]() {
     while (true) {
       FECPacket fecpacket = pkts.wait_and_pop();
+      if (fecpacket.pkt_no_ > fecpacket.total_pkts) {
+        // Check for dummy pkts
+        continue;
+      }
       if (!frames[fecpacket.fec_frame_no_].is_valid) {
         frames[fecpacket.fec_frame_no_] = FECFrame {fecpacket};
-        frames[fecpacket.fec_frame_no_].addPacket(fecpacket, decoders);
+        frames[fecpacket.fec_frame_no_].addPacket(fecpacket, decoders, past_source_state);
       } else {
-        frames[fecpacket.fec_frame_no_].addPacket(fecpacket, decoders);
+        frames[fecpacket.fec_frame_no_].addPacket(fecpacket, decoders, past_source_state);
       }
     }
   }).detach();

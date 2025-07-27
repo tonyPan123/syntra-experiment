@@ -1,5 +1,6 @@
 #include <chrono>
 #include <queue>
+#include <thread>
 
 #include "reed_solomon.hpp"
 #include "packet.hh"
@@ -106,18 +107,64 @@ using namespace std;
             frame_no_to_received_data[frame_no] = v;
          }
          fecs = vector<FECPacket>(total_pkts - pkts_needed_for_decoding);
-         addPacket(pkt);
    }
 
-   void FECFrame::addPacket(FECPacket &pkt) {
+   void recover_frames() {
+
+
+
+   }
+
+   void FECFrame::addPacket(FECPacket &pkt, unordered_map<uint32_t, Decoder> & decoders, [[maybe_unused]]boost::circular_buffer<uint32_t> & past_source_state) {
       int start = 1;
       // Data packet
       for (uint32_t frame_no = frame_no_start; frame_no <= frame_no_end; frame_no++) {
          int end = start + frame_no_to_length[frame_no] - 1;
          if (start <= pkt.pkt_no_ && pkt.pkt_no_ <= end ) {
             frame_no_to_received_data[frame_no][pkt.pkt_no_ - start] = pkt;
-            checkComplete(frame_no);
-            break;
+            auto & pkts = frame_no_to_received_data[frame_no];
+            for (auto pkt : pkts) {
+               if (!pkt.is_valid) {
+                  return;
+               }
+            }
+            // TODO: Check for extra-padding of the last packet during FEC
+            FragmentedFrame ff {connection_id_, Packet{pkts[0].payload_} };
+            for (int i = 1; i < (int)pkts.size(); i++) {
+               ff.add_packet(Packet{pkts[i].payload_});
+            }
+            //cout << ff.source_state() << endl;
+            //if (ff.source_state() != past_source_state[2]) {
+            //   past_source_state.push_back(ff.source_state());
+            //}
+            
+            for (auto it = decoders.cbegin(), next_it = it; it != decoders.cend(); it = next_it) {
+               ++next_it;
+               //if (it->first != past_source_state[0] && it->first != past_source_state[1] && it->first != past_source_state[2])
+               if (it->first != ff.source_state())
+               {
+                  decoders.erase(it);
+               }
+            }
+            //cout << "Source State is " << ff.source_state() << endl;
+            if (decoders.count(ff.source_state()) >= 1) {
+               Decoder decoder{decoders.at(ff.source_state())};
+               //Decoder decoder {1280, 720};
+               const string frame = ff.frame();
+               uint32_t frame_no = ff.frame_no();
+               const Optional<RasterHandle> raster = decoder.parse_and_decode_frame( frame );
+               auto now = chrono::steady_clock::now();
+               uint32_t ms = chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
+               cout << "Frame " << frame_no << " 's latency is " << ms - pkts[0].timestamp << endl;
+               cout << decoder.minihash() << endl;
+               decoders.insert( make_pair( decoder.minihash(), decoder ) );
+            } else {
+               std::this_thread::sleep_for(std::chrono::milliseconds(10));
+               auto now = chrono::steady_clock::now();
+               uint32_t ms = chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
+               cout << "Frame " << frame_no << " 's latency is " << ms - pkts[0].timestamp << endl;
+            }
+            return;
          }
          start = end + 1;
       }
@@ -125,27 +172,13 @@ using namespace std;
       if (pkt.pkt_no_ > pkts_needed_for_decoding) {
          fecs[pkt.pkt_no_ - pkts_needed_for_decoding - 1] = pkt;
       }
+      return;
    }
 
-   void FECFrame::checkComplete(uint32_t frame_no) {
-      auto & pkts = frame_no_to_received_data[frame_no];
-      for (auto pkt : pkts) {
-         if (!pkt.is_valid) {
-            return;
-         }
-      }
-      // TODO: Check for extra-padding of the last packet during FEC
-      FragmentedFrame ff {connection_id_, Packet{pkts[0].payload_} };
-      for (int i = 1; i < (int)pkts.size(); i++) {
-         ff.add_packet(Packet{pkts[i].payload_});
-      }
-      // TODO: Decoding process
+      //auto now = chrono::steady_clock::now();
+      //uint32_t ms = chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
+      //cout << "Frame " << ff.frame_no() << " 's latency is " << ms  << endl;
 
-
-      auto now = chrono::steady_clock::now();
-      uint32_t ms = chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
-      cout << "Frame " << ff.frame_no() << " 's latency is " << ms  << endl;
-   }
 
 
    FECFrame::FECFrame(const uint32_t fec_frame_no, FECPre & pre, const uint16_t fec_length)

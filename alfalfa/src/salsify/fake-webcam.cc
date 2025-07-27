@@ -242,7 +242,9 @@ int main( int argc, char *argv[] )
       //if ( not raster.initialized() ) {
       //  return { ResultType::Exit, EXIT_FAILURE };
       //}
-      abr.add_fetch_frame(input);
+      if (!abr.stop_encode) {
+        abr.add_fetch_frame(input);
+      }
       encode_pipe.first.write( "1" );
 
 
@@ -252,7 +254,7 @@ int main( int argc, char *argv[] )
       return ResultType::Continue;
     }, [&]() { 
       std::chrono::duration<double, std::ratio<1,1000>> diff = (system_clock::now() - fetch_start); // in millis
-      return diff.count() >= (33) && !abr.stop_encode; 
+      return diff.count() >= (50) && !abr.stop_encode; 
     } ) 
   );
 
@@ -277,9 +279,9 @@ int main( int argc, char *argv[] )
       std::chrono::duration<double, std::ratio<1,1000>> diff1 = (last_sent - after_fec);
       std::chrono::duration<double, std::ratio<1,1000>> diff2 = (after_update - before_update);
       std::chrono::duration<double, std::ratio<1,1000>> diff3 = (after_fec - after_update);
-      //cout << "This update takes " << diff2.count() << endl; 
-      //cout << "This fec takes " << diff3.count() << endl; 
-      //cout << "This scheduling takes " << diff1.count() << endl; 
+      cout << "This update takes " << diff2.count() << endl; 
+      cout << "This fec takes " << diff3.count() << endl; 
+      cout << "This scheduling takes " << diff1.count() << endl; 
       update_pipe.first.write( "1" );
       return ResultType::Continue;
     }, [&]() { 

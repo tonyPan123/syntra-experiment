@@ -56,6 +56,7 @@
 #include "procinfo.hh"
 #include "ivf_reader.hh"
 #include "yuv4mpeg.hh"
+#include "concurrent_queue.hh"
 
 using namespace std;
 using namespace std::chrono;
@@ -211,7 +212,7 @@ int main( int argc, char *argv[] )
 
   const option command_line_options[] = {
     { "mode",          required_argument, nullptr, 'm' },
-    { "device",        required_argument, nullptr, 'd' },
+    //{ "device",        required_argument, nullptr, 'd' },
     { "pixfmt",        required_argument, nullptr, 'p' },
     //{ "update-rate",   required_argument, nullptr, 'u' },
     //{ "log-mem-usage", no_argument,       nullptr, 'M' },
@@ -355,11 +356,16 @@ int main( int argc, char *argv[] )
 
   Poller poller;
 
-  queue<Optional<RasterHandle>> fetched_frames;
+  ConcurrentQueue<Optional<RasterHandle>> fetched_frames;
   queue<chrono::milliseconds> encoding_times;
 
-  thread([&fetched_frames, &camera, &encoding_times]() {
+  // Make sure there is at least one frame
+  auto fetch_start = system_clock::now(); 
+
+
+  thread([&fetched_frames, &camera, &encoding_times, &fetch_start]() {
     while (true) {
+      fetch_start = system_clock::now(); 
       Optional<RasterHandle> raster = camera.get_next_frame();
         if ( raster.initialized() ) {
           fetched_frames.push(raster);
@@ -367,10 +373,13 @@ int main( int argc, char *argv[] )
         } else {
           break;
         }
+        std::chrono::duration<double, std::ratio<1,1000>> diff = (system_clock::now() - fetch_start);
+        while (diff.count() < 50) {
+          std::this_thread::sleep_for(std::chrono::milliseconds(5));
+          diff = (system_clock::now() - fetch_start);
+        }
     }
   }).detach(); 
-  // Make sure there is at least one frame
-  //auto fetch_start = system_clock::now(); 
 
   /* fetch frames from webcam */
   poller.add_action( Poller::Action( encode_start_pipe.second, Direction::In,
@@ -378,9 +387,9 @@ int main( int argc, char *argv[] )
       encode_start_pipe.second.read();
 
       //last_raster = camera.get_next_frame();
-      encoding_times.push(duration_cast<milliseconds>( system_clock::now().time_since_epoch() ));
-      last_raster = fetched_frames.front();
-      fetched_frames.pop();
+      //encoding_times.push(duration_cast<milliseconds>( system_clock::now().time_since_epoch() ));
+      last_raster = fetched_frames.wait_and_pop();
+      //fetched_frames.pop();
       //fetch_start = system_clock::now(); 
 
       if ( not last_raster.initialized() ) {
@@ -558,8 +567,8 @@ int main( int argc, char *argv[] )
       return ResultType::Continue;
     } , [&]() { 
       //std::chrono::duration<double, std::ratio<1,1000>> diff = (system_clock::now() - fetch_start); // in millis
-      //return diff.count() >= (33) && fetched_frames.size() > 0; 
-      return fetched_frames.size() > 0;
+      //return diff.count() >= (70) && fetched_frames.size() > 0; 
+      return !fetched_frames.empty();
     } )
   );
 
@@ -623,7 +632,8 @@ int main( int argc, char *argv[] )
         if ( best_output_index == numeric_limits<size_t>::max() ) {
           if ( skipped_count < MAX_SKIPPED or good_outputs.back().job_name != "fail-small" ) {
             /* skip frame */
-            fetched_frames.pop();
+            //fetched_frames.pop();
+            encoding_times.pop();
             cerr << "["
                  << duration_cast<milliseconds>( system_clock::now().time_since_epoch() ).count()
                  << "] "

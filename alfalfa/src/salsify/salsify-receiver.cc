@@ -47,6 +47,7 @@
 #include "display.hh"
 #include "paranoid.hh"
 #include "procinfo.hh"
+#include "concurrent_queue.hh"
 
 using namespace std;
 using namespace std::chrono;
@@ -297,7 +298,7 @@ int main( int argc, char *argv[] )
 
         // here we apply the frame
         enqueue_frame( player, fragment.frame() );
-
+        cout << "Frame: " << fragment.frame_no()  << " spends " << duration_cast<milliseconds>( system_clock::now().time_since_epoch()).count() << endl;
         // state "after" applying the frame
         current_state = player.current_decoder().minihash();
 

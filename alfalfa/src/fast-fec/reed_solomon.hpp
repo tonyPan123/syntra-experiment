@@ -8,6 +8,9 @@
 #include <set>
 
 #include "packet.hh"
+#include "optional.hh"
+#include "player.hh"
+#include <boost/circular_buffer.hpp>
 
 using namespace std;
 
@@ -146,8 +149,7 @@ class FECFrame {
     FECFrame(uint32_t fec_frame_no, FECPre & pre, const uint16_t fec_length);
     FECFrame(FECPacket & pkt);
     FECFrame() : is_valid(false) {};
-    void addPacket(FECPacket & pkt);
-    void checkComplete(uint32_t frame_no);
+    void addPacket(FECPacket & pkt, unordered_map<uint32_t, Decoder> & decoders, boost::circular_buffer<uint32_t> & past_source_state);
     void recover_loss();
 };
 
