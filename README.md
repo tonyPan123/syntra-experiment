@@ -14,9 +14,32 @@ pip3 install pandas
 ```
 python3 -m qe.netcal.qe_queries -t 6
 ```
-
+Build rust dependency, 
 ```
 cargo build --release
+```
+Build gf-complete
+```
+./autogen.sh
+./configure
+make
+sudo make install
+```
+
+Then you can build syntra and salsify, you need to have such dependencies first: 
+```
+sudo apt-get install yasm libxinerama-dev libxcursor-dev libglu1-mesa-dev libboost-all-dev libx264-dev libxrandr-dev libxi-dev libglew-dev libglfw3-dev
+
+```
+Then, 
+```
+mkdir src/rust-deps
+cp ../minimax/target/release/libnetwork_model_lib.a src/rust-deps/
+```
+```
+./autogen.sh
+./configure
+
 ```
 
 If you got error like 
@@ -27,7 +50,8 @@ If you got error like
 ``` 
 Then at 
 ```
-src/frontend/Makefile
+src/frontend/Makefile.am
+src/salsify/Makefile.am
 ```
 You need to delete 
 ```
