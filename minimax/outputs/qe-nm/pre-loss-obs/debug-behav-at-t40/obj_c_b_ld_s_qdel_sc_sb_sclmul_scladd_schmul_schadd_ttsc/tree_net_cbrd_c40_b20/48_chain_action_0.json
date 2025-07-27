@@ -1,0 +1,431 @@
+[
+    {
+        "observation": {
+            "a": 663.6666666666666,
+            "s": 622.6666666666666,
+            "lo": [
+                {
+                    "t": 2,
+                    "l": 0.0
+                },
+                {
+                    "t": 1,
+                    "l": 0.0
+                }
+            ]
+        },
+        "cca_rate": null,
+        "belief_bounds": {
+            "min_c": 20.0,
+            "max_c": 40.0,
+            "min_b": 5.0,
+            "max_b": 1000.0,
+            "min_if": 41.0,
+            "max_if": 41.0
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -62.5,
+            "qdel": 1.0,
+            "shrink_c": false,
+            "shrink_b": false,
+            "shrink_maxc_mul": false,
+            "shrink_maxc_add": false,
+            "shrink_minc_mul": false,
+            "shrink_minc_add": false,
+            "time_to_shrink_c": 12
+        },
+        "chosen_move": {
+            "cca_rate": 22.0
+        },
+        "chosen_leaf_value": {
+            "belief_bounds": {
+                "min_c": 22.9375,
+                "max_c": 1000.0,
+                "min_b": 5.0,
+                "max_b": 1000.0,
+                "min_if": 22.5,
+                "max_if": 22.5
+            },
+            "metrics": {
+                "loss": 0.0,
+                "neg_delivered": -153.8125,
+                "qdel": 1.0,
+                "shrink_c": false,
+                "shrink_b": false,
+                "shrink_maxc_mul": false,
+                "shrink_maxc_add": false,
+                "shrink_minc_mul": false,
+                "shrink_minc_add": true,
+                "time_to_shrink_c": 12
+            }
+        }
+    },
+    {
+        "observation": {
+            "a": 663.6666666666666,
+            "s": 622.6666666666666,
+            "lo": [
+                {
+                    "t": 2,
+                    "l": 0.0
+                },
+                {
+                    "t": 1,
+                    "l": 0.0
+                }
+            ]
+        },
+        "cca_rate": 1.0,
+        "belief_bounds": {
+            "min_c": 20.0,
+            "max_c": 40.0,
+            "min_b": 5.0,
+            "max_b": 1000.0,
+            "min_if": 41.0,
+            "max_if": 41.0
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -62.5,
+            "qdel": 1.0,
+            "shrink_c": false,
+            "shrink_b": false,
+            "shrink_maxc_mul": false,
+            "shrink_maxc_add": false,
+            "shrink_minc_mul": false,
+            "shrink_minc_add": false,
+            "time_to_shrink_c": 12
+        },
+        "chosen_move": {
+            "s": 664.6666666666666,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                },
+                {
+                    "t": 0,
+                    "l": 0.0
+                }
+            ]
+        },
+        "chosen_leaf_value": {
+            "belief_bounds": {
+                "min_c": 22.0,
+                "max_c": 1000.0,
+                "min_b": 5.0,
+                "max_b": 1000.0,
+                "min_if": 0.0,
+                "max_if": 0.0
+            },
+            "metrics": {
+                "loss": 0.0,
+                "neg_delivered": -148.5,
+                "qdel": 1.0,
+                "shrink_c": false,
+                "shrink_b": false,
+                "shrink_maxc_mul": false,
+                "shrink_maxc_add": false,
+                "shrink_minc_mul": false,
+                "shrink_minc_add": true,
+                "time_to_shrink_c": 12
+            }
+        }
+    },
+    {
+        "observation": {
+            "a": 664.6666666666666,
+            "s": 664.6666666666666,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                },
+                {
+                    "t": 0,
+                    "l": 0.0
+                }
+            ]
+        },
+        "cca_rate": null,
+        "belief_bounds": {
+            "min_c": 21.166666666666668,
+            "max_c": 58.833333333333336,
+            "min_b": 5.0,
+            "max_b": 1000.0,
+            "min_if": 0.0,
+            "max_if": 0.0
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -104.5,
+            "qdel": 1.0,
+            "shrink_c": false,
+            "shrink_b": false,
+            "shrink_maxc_mul": false,
+            "shrink_maxc_add": false,
+            "shrink_minc_mul": false,
+            "shrink_minc_add": true,
+            "time_to_shrink_c": 12
+        },
+        "chosen_move": {
+            "cca_rate": 43.0
+        },
+        "chosen_leaf_value": {
+            "belief_bounds": {
+                "min_c": 22.0,
+                "max_c": 1000.0,
+                "min_b": 5.0,
+                "max_b": 1000.0,
+                "min_if": 0.0,
+                "max_if": 0.0
+            },
+            "metrics": {
+                "loss": 0.0,
+                "neg_delivered": -148.5,
+                "qdel": 1.0,
+                "shrink_c": false,
+                "shrink_b": false,
+                "shrink_maxc_mul": false,
+                "shrink_maxc_add": false,
+                "shrink_minc_mul": false,
+                "shrink_minc_add": true,
+                "time_to_shrink_c": 12
+            }
+        }
+    },
+    {
+        "observation": {
+            "a": 664.6666666666666,
+            "s": 664.6666666666666,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                },
+                {
+                    "t": 0,
+                    "l": 0.0
+                }
+            ]
+        },
+        "cca_rate": 43.0,
+        "belief_bounds": {
+            "min_c": 21.166666666666668,
+            "max_c": 58.833333333333336,
+            "min_b": 5.0,
+            "max_b": 1000.0,
+            "min_if": 0.0,
+            "max_if": 0.0
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -104.5,
+            "qdel": 1.0,
+            "shrink_c": false,
+            "shrink_b": false,
+            "shrink_maxc_mul": false,
+            "shrink_maxc_add": false,
+            "shrink_minc_mul": false,
+            "shrink_minc_add": true,
+            "time_to_shrink_c": 12
+        },
+        "chosen_move": {
+            "s": 686.1666666666666,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                }
+            ]
+        },
+        "chosen_leaf_value": {
+            "belief_bounds": {
+                "min_c": 22.0,
+                "max_c": 1000.0,
+                "min_b": 5.0,
+                "max_b": 1000.0,
+                "min_if": 0.0,
+                "max_if": 0.0
+            },
+            "metrics": {
+                "loss": 0.0,
+                "neg_delivered": -148.5,
+                "qdel": 1.0,
+                "shrink_c": false,
+                "shrink_b": false,
+                "shrink_maxc_mul": false,
+                "shrink_maxc_add": false,
+                "shrink_minc_mul": false,
+                "shrink_minc_add": true,
+                "time_to_shrink_c": 12
+            }
+        }
+    },
+    {
+        "observation": {
+            "a": 707.6666666666666,
+            "s": 686.1666666666666,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                }
+            ]
+        },
+        "cca_rate": null,
+        "belief_bounds": {
+            "min_c": 21.5,
+            "max_c": 1000.0,
+            "min_b": 5.0,
+            "max_b": 1000.0,
+            "min_if": 21.5,
+            "max_if": 21.5
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -126.0,
+            "qdel": 1.0,
+            "shrink_c": false,
+            "shrink_b": false,
+            "shrink_maxc_mul": false,
+            "shrink_maxc_add": false,
+            "shrink_minc_mul": false,
+            "shrink_minc_add": true,
+            "time_to_shrink_c": 12
+        },
+        "chosen_move": {
+            "cca_rate": 1.0
+        },
+        "chosen_leaf_value": {
+            "belief_bounds": {
+                "min_c": 22.0,
+                "max_c": 1000.0,
+                "min_b": 5.0,
+                "max_b": 1000.0,
+                "min_if": 0.0,
+                "max_if": 0.0
+            },
+            "metrics": {
+                "loss": 0.0,
+                "neg_delivered": -148.5,
+                "qdel": 1.0,
+                "shrink_c": false,
+                "shrink_b": false,
+                "shrink_maxc_mul": false,
+                "shrink_maxc_add": false,
+                "shrink_minc_mul": false,
+                "shrink_minc_add": true,
+                "time_to_shrink_c": 12
+            }
+        }
+    },
+    {
+        "observation": {
+            "a": 707.6666666666666,
+            "s": 686.1666666666666,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                }
+            ]
+        },
+        "cca_rate": 1.0,
+        "belief_bounds": {
+            "min_c": 21.5,
+            "max_c": 1000.0,
+            "min_b": 5.0,
+            "max_b": 1000.0,
+            "min_if": 21.5,
+            "max_if": 21.5
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -126.0,
+            "qdel": 1.0,
+            "shrink_c": false,
+            "shrink_b": false,
+            "shrink_maxc_mul": false,
+            "shrink_maxc_add": false,
+            "shrink_minc_mul": false,
+            "shrink_minc_add": true,
+            "time_to_shrink_c": 12
+        },
+        "chosen_move": {
+            "s": 708.6666666666666,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                },
+                {
+                    "t": 0,
+                    "l": 0.0
+                }
+            ]
+        },
+        "chosen_leaf_value": {
+            "belief_bounds": {
+                "min_c": 22.0,
+                "max_c": 1000.0,
+                "min_b": 5.0,
+                "max_b": 1000.0,
+                "min_if": 0.0,
+                "max_if": 0.0
+            },
+            "metrics": {
+                "loss": 0.0,
+                "neg_delivered": -148.5,
+                "qdel": 1.0,
+                "shrink_c": false,
+                "shrink_b": false,
+                "shrink_maxc_mul": false,
+                "shrink_maxc_add": false,
+                "shrink_minc_mul": false,
+                "shrink_minc_add": true,
+                "time_to_shrink_c": 12
+            }
+        }
+    },
+    {
+        "observation": {
+            "a": 708.6666666666666,
+            "s": 708.6666666666666,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                },
+                {
+                    "t": 0,
+                    "l": 0.0
+                }
+            ]
+        },
+        "cca_rate": null,
+        "belief_bounds": {
+            "min_c": 22.0,
+            "max_c": 1000.0,
+            "min_b": 5.0,
+            "max_b": 1000.0,
+            "min_if": 0.0,
+            "max_if": 0.0
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -148.5,
+            "qdel": 1.0,
+            "shrink_c": false,
+            "shrink_b": false,
+            "shrink_maxc_mul": false,
+            "shrink_maxc_add": false,
+            "shrink_minc_mul": false,
+            "shrink_minc_add": true,
+            "time_to_shrink_c": 12
+        },
+        "chosen_move": null,
+        "chosen_leaf_value": null
+    }
+]

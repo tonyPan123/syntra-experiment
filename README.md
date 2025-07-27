@@ -14,3 +14,7 @@ pip3 install pandas
 ```
 python3 -m qe.netcal.qe_queries -t 6
 ```
+
+```
+cargo build --release
+```

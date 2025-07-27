@@ -1,0 +1,119 @@
+[
+    {
+        "observation": {
+            "a": 1880.42138671875,
+            "s": 1790.0,
+            "ld": 21.84765625,
+            "qdel": 2.0
+        },
+        "cca_rate": null,
+        "belief_bounds": {
+            "min_c": 16.0,
+            "max_c": 26.6640625,
+            "min_b": 33.9169921875,
+            "max_b": 119.94921875
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -100.0,
+            "qdel": 0.0
+        },
+        "chosen_move": {
+            "cca_rate": 32.0
+        }
+    },
+    {
+        "observation": {
+            "a": 1880.42138671875,
+            "s": 1790.0,
+            "ld": 21.84765625,
+            "qdel": 2.0
+        },
+        "cca_rate": 32.0,
+        "belief_bounds": {
+            "min_c": 16.0,
+            "max_c": 26.6640625,
+            "min_b": 33.9169921875,
+            "max_b": 119.94921875
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -100.0,
+            "qdel": 0.0
+        },
+        "chosen_move": {
+            "ddt s": 53.3193359375,
+            "ddt ld": 0.0,
+            "qdel": 1.0
+        }
+    },
+    {
+        "observation": {
+            "a": 1912.42138671875,
+            "s": 1843.3193359375,
+            "ld": 21.84765625,
+            "qdel": 1.0
+        },
+        "cca_rate": null,
+        "belief_bounds": {
+            "min_c": 26.66015625,
+            "max_c": 29.9853515625,
+            "min_b": 36.59375,
+            "max_b": 119.9638671875
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -153.3193359375,
+            "qdel": 0.0
+        },
+        "chosen_move": {
+            "cca_rate": 26.66015625
+        }
+    },
+    {
+        "observation": {
+            "a": 1912.42138671875,
+            "s": 1843.3193359375,
+            "ld": 21.84765625,
+            "qdel": 1.0
+        },
+        "cca_rate": 26.66015625,
+        "belief_bounds": {
+            "min_c": 26.66015625,
+            "max_c": 29.9853515625,
+            "min_b": 36.59375,
+            "max_b": 119.9638671875
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -153.3193359375,
+            "qdel": 0.0
+        },
+        "chosen_move": {
+            "ddt s": 0.0,
+            "ddt ld": 0.0,
+            "qdel": 1.0
+        }
+    },
+    {
+        "observation": {
+            "a": 1939.08154296875,
+            "s": 1843.3193359375,
+            "ld": 21.84765625,
+            "qdel": 1.0
+        },
+        "cca_rate": null,
+        "belief_bounds": {
+            "min_c": 26.66015625,
+            "max_c": 31.0791015625,
+            "min_b": 36.607421875,
+            "max_b": 119.9638671875
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -153.3193359375,
+            "qdel": 0.0
+        },
+        "chosen_move": null
+    }
+]

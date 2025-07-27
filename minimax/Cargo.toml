@@ -1,0 +1,11 @@
+[workspace]
+
+members = [
+    "minimax",
+    "cc_common",
+    "network_model_nc",
+    # "network_model_z3",
+    "network_model_nc_qe_output",
+    "ds"
+, "abr_common", "network_model_c"]
+resolver = "2"

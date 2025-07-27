@@ -1,0 +1,795 @@
+[
+    {
+        "observation": {
+            "a": 1001.125,
+            "s": 947.8125,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                }
+            ]
+        },
+        "cca_rate": null,
+        "history": [
+            {
+                "a": 872.8125,
+                "s": 849.21875,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 924.0625,
+                "s": 872.8125,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 925.0625,
+                "s": 922.8125,
+                "lo": [
+                    {
+                        "t": 2,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 947.8125,
+                "s": 925.0625,
+                "lo": [
+                    {
+                        "t": 2,
+                        "l": 0.0
+                    },
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1001.125,
+                "s": 947.8125,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            }
+        ],
+        "belief_bounds": {
+            "min_c": 25.0,
+            "max_c": 73.59375,
+            "min_b": 5.0,
+            "max_b": 1000.0,
+            "min_if": 53.3125,
+            "max_if": 53.3125
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -98.59375,
+            "qdel": 1.0,
+            "shrink_c": false,
+            "shrink_b": false,
+            "shrink_maxc_mul": false,
+            "shrink_maxc_add": false,
+            "shrink_minc_mul": false,
+            "shrink_minc_add": false,
+            "time_to_shrink_c": 12
+        },
+        "chosen_move": {
+            "cca_rate": 27.0625
+        },
+        "chosen_leaf_value": {
+            "belief_bounds": {
+                "min_c": 29.8046875,
+                "max_c": 1000.0,
+                "min_b": 5.0,
+                "max_b": 1000.0,
+                "min_if": 28.71875,
+                "max_if": 28.71875
+            },
+            "metrics": {
+                "loss": 0.0,
+                "neg_delivered": -216.7265625,
+                "qdel": 1.0,
+                "shrink_c": false,
+                "shrink_b": false,
+                "shrink_maxc_mul": false,
+                "shrink_maxc_add": false,
+                "shrink_minc_mul": false,
+                "shrink_minc_add": true,
+                "time_to_shrink_c": 12
+            }
+        }
+    },
+    {
+        "observation": {
+            "a": 1001.125,
+            "s": 947.8125,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                }
+            ]
+        },
+        "cca_rate": 27.0625,
+        "history": [
+            {
+                "a": 872.8125,
+                "s": 849.21875,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 924.0625,
+                "s": 872.8125,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 925.0625,
+                "s": 922.8125,
+                "lo": [
+                    {
+                        "t": 2,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 947.8125,
+                "s": 925.0625,
+                "lo": [
+                    {
+                        "t": 2,
+                        "l": 0.0
+                    },
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1001.125,
+                "s": 947.8125,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            }
+        ],
+        "belief_bounds": {
+            "min_c": 25.0,
+            "max_c": 73.59375,
+            "min_b": 5.0,
+            "max_b": 1000.0,
+            "min_if": 53.3125,
+            "max_if": 53.3125
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -98.59375,
+            "qdel": 1.0,
+            "shrink_c": false,
+            "shrink_b": false,
+            "shrink_maxc_mul": false,
+            "shrink_maxc_add": false,
+            "shrink_minc_mul": false,
+            "shrink_minc_add": false,
+            "time_to_shrink_c": 12
+        },
+        "chosen_move": {
+            "s": 1007.421875,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                }
+            ]
+        },
+        "chosen_leaf_value": {
+            "belief_bounds": {
+                "min_c": 29.8046875,
+                "max_c": 1000.0,
+                "min_b": 5.0,
+                "max_b": 1000.0,
+                "min_if": 28.71875,
+                "max_if": 28.71875
+            },
+            "metrics": {
+                "loss": 0.0,
+                "neg_delivered": -216.7265625,
+                "qdel": 1.0,
+                "shrink_c": false,
+                "shrink_b": false,
+                "shrink_maxc_mul": false,
+                "shrink_maxc_add": false,
+                "shrink_minc_mul": false,
+                "shrink_minc_add": true,
+                "time_to_shrink_c": 12
+            }
+        }
+    },
+    {
+        "observation": {
+            "a": 1028.1875,
+            "s": 1007.421875,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                }
+            ]
+        },
+        "cca_rate": null,
+        "history": [
+            {
+                "a": 924.0625,
+                "s": 872.8125,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 925.0625,
+                "s": 922.8125,
+                "lo": [
+                    {
+                        "t": 2,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 947.8125,
+                "s": 925.0625,
+                "lo": [
+                    {
+                        "t": 2,
+                        "l": 0.0
+                    },
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1001.125,
+                "s": 947.8125,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1028.1875,
+                "s": 1007.421875,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            }
+        ],
+        "belief_bounds": {
+            "min_c": 29.8046875,
+            "max_c": 1000.0,
+            "min_b": 5.0,
+            "max_b": 1000.0,
+            "min_if": 20.765625,
+            "max_if": 20.765625
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -158.203125,
+            "qdel": 1.0,
+            "shrink_c": false,
+            "shrink_b": false,
+            "shrink_maxc_mul": false,
+            "shrink_maxc_add": false,
+            "shrink_minc_mul": false,
+            "shrink_minc_add": true,
+            "time_to_shrink_c": 12
+        },
+        "chosen_move": {
+            "cca_rate": 34.609375
+        },
+        "chosen_leaf_value": {
+            "belief_bounds": {
+                "min_c": 29.8046875,
+                "max_c": 1000.0,
+                "min_b": 5.0,
+                "max_b": 1000.0,
+                "min_if": 28.71875,
+                "max_if": 28.71875
+            },
+            "metrics": {
+                "loss": 0.0,
+                "neg_delivered": -216.7265625,
+                "qdel": 1.0,
+                "shrink_c": false,
+                "shrink_b": false,
+                "shrink_maxc_mul": false,
+                "shrink_maxc_add": false,
+                "shrink_minc_mul": false,
+                "shrink_minc_add": true,
+                "time_to_shrink_c": 12
+            }
+        }
+    },
+    {
+        "observation": {
+            "a": 1028.1875,
+            "s": 1007.421875,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                }
+            ]
+        },
+        "cca_rate": 34.609375,
+        "history": [
+            {
+                "a": 924.0625,
+                "s": 872.8125,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 925.0625,
+                "s": 922.8125,
+                "lo": [
+                    {
+                        "t": 2,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 947.8125,
+                "s": 925.0625,
+                "lo": [
+                    {
+                        "t": 2,
+                        "l": 0.0
+                    },
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1001.125,
+                "s": 947.8125,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1028.1875,
+                "s": 1007.421875,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            }
+        ],
+        "belief_bounds": {
+            "min_c": 29.8046875,
+            "max_c": 1000.0,
+            "min_b": 5.0,
+            "max_b": 1000.0,
+            "min_if": 20.765625,
+            "max_if": 20.765625
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -158.203125,
+            "qdel": 1.0,
+            "shrink_c": false,
+            "shrink_b": false,
+            "shrink_maxc_mul": false,
+            "shrink_maxc_add": false,
+            "shrink_minc_mul": false,
+            "shrink_minc_add": true,
+            "time_to_shrink_c": 12
+        },
+        "chosen_move": {
+            "s": 1035.109375,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                }
+            ]
+        },
+        "chosen_leaf_value": {
+            "belief_bounds": {
+                "min_c": 29.8046875,
+                "max_c": 1000.0,
+                "min_b": 5.0,
+                "max_b": 1000.0,
+                "min_if": 28.71875,
+                "max_if": 28.71875
+            },
+            "metrics": {
+                "loss": 0.0,
+                "neg_delivered": -216.7265625,
+                "qdel": 1.0,
+                "shrink_c": false,
+                "shrink_b": false,
+                "shrink_maxc_mul": false,
+                "shrink_maxc_add": false,
+                "shrink_minc_mul": false,
+                "shrink_minc_add": true,
+                "time_to_shrink_c": 12
+            }
+        }
+    },
+    {
+        "observation": {
+            "a": 1062.796875,
+            "s": 1035.109375,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                }
+            ]
+        },
+        "cca_rate": null,
+        "history": [
+            {
+                "a": 925.0625,
+                "s": 922.8125,
+                "lo": [
+                    {
+                        "t": 2,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 947.8125,
+                "s": 925.0625,
+                "lo": [
+                    {
+                        "t": 2,
+                        "l": 0.0
+                    },
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1001.125,
+                "s": 947.8125,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1028.1875,
+                "s": 1007.421875,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1062.796875,
+                "s": 1035.109375,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            }
+        ],
+        "belief_bounds": {
+            "min_c": 29.8046875,
+            "max_c": 1000.0,
+            "min_b": 5.0,
+            "max_b": 1000.0,
+            "min_if": 27.6875,
+            "max_if": 27.6875
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -185.890625,
+            "qdel": 1.0,
+            "shrink_c": false,
+            "shrink_b": false,
+            "shrink_maxc_mul": false,
+            "shrink_maxc_add": false,
+            "shrink_minc_mul": false,
+            "shrink_minc_add": true,
+            "time_to_shrink_c": 12
+        },
+        "chosen_move": {
+            "cca_rate": 31.8671875
+        },
+        "chosen_leaf_value": {
+            "belief_bounds": {
+                "min_c": 29.8046875,
+                "max_c": 1000.0,
+                "min_b": 5.0,
+                "max_b": 1000.0,
+                "min_if": 28.71875,
+                "max_if": 28.71875
+            },
+            "metrics": {
+                "loss": 0.0,
+                "neg_delivered": -216.7265625,
+                "qdel": 1.0,
+                "shrink_c": false,
+                "shrink_b": false,
+                "shrink_maxc_mul": false,
+                "shrink_maxc_add": false,
+                "shrink_minc_mul": false,
+                "shrink_minc_add": true,
+                "time_to_shrink_c": 12
+            }
+        }
+    },
+    {
+        "observation": {
+            "a": 1062.796875,
+            "s": 1035.109375,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                }
+            ]
+        },
+        "cca_rate": 31.8671875,
+        "history": [
+            {
+                "a": 925.0625,
+                "s": 922.8125,
+                "lo": [
+                    {
+                        "t": 2,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 947.8125,
+                "s": 925.0625,
+                "lo": [
+                    {
+                        "t": 2,
+                        "l": 0.0
+                    },
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1001.125,
+                "s": 947.8125,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1028.1875,
+                "s": 1007.421875,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1062.796875,
+                "s": 1035.109375,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            }
+        ],
+        "belief_bounds": {
+            "min_c": 29.8046875,
+            "max_c": 1000.0,
+            "min_b": 5.0,
+            "max_b": 1000.0,
+            "min_if": 27.6875,
+            "max_if": 27.6875
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -185.890625,
+            "qdel": 1.0,
+            "shrink_c": false,
+            "shrink_b": false,
+            "shrink_maxc_mul": false,
+            "shrink_maxc_add": false,
+            "shrink_minc_mul": false,
+            "shrink_minc_add": true,
+            "time_to_shrink_c": 12
+        },
+        "chosen_move": {
+            "s": 1065.9453125,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                }
+            ]
+        },
+        "chosen_leaf_value": {
+            "belief_bounds": {
+                "min_c": 29.8046875,
+                "max_c": 1000.0,
+                "min_b": 5.0,
+                "max_b": 1000.0,
+                "min_if": 28.71875,
+                "max_if": 28.71875
+            },
+            "metrics": {
+                "loss": 0.0,
+                "neg_delivered": -216.7265625,
+                "qdel": 1.0,
+                "shrink_c": false,
+                "shrink_b": false,
+                "shrink_maxc_mul": false,
+                "shrink_maxc_add": false,
+                "shrink_minc_mul": false,
+                "shrink_minc_add": true,
+                "time_to_shrink_c": 12
+            }
+        }
+    },
+    {
+        "observation": {
+            "a": 1094.6640625,
+            "s": 1065.9453125,
+            "lo": [
+                {
+                    "t": 1,
+                    "l": 0.0
+                }
+            ]
+        },
+        "cca_rate": null,
+        "history": [
+            {
+                "a": 947.8125,
+                "s": 925.0625,
+                "lo": [
+                    {
+                        "t": 2,
+                        "l": 0.0
+                    },
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1001.125,
+                "s": 947.8125,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1028.1875,
+                "s": 1007.421875,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1062.796875,
+                "s": 1035.109375,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            },
+            {
+                "a": 1094.6640625,
+                "s": 1065.9453125,
+                "lo": [
+                    {
+                        "t": 1,
+                        "l": 0.0
+                    }
+                ]
+            }
+        ],
+        "belief_bounds": {
+            "min_c": 29.8046875,
+            "max_c": 1000.0,
+            "min_b": 5.0,
+            "max_b": 1000.0,
+            "min_if": 28.71875,
+            "max_if": 28.71875
+        },
+        "metrics": {
+            "loss": 0.0,
+            "neg_delivered": -216.7265625,
+            "qdel": 1.0,
+            "shrink_c": false,
+            "shrink_b": false,
+            "shrink_maxc_mul": false,
+            "shrink_maxc_add": false,
+            "shrink_minc_mul": false,
+            "shrink_minc_add": true,
+            "time_to_shrink_c": 12
+        },
+        "chosen_move": null,
+        "chosen_leaf_value": null
+    }
+]
