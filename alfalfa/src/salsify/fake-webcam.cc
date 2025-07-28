@@ -128,7 +128,7 @@ int main( int argc, char *argv[] )
 
     /* construct Socket for outgoing datagrams */
   UDPSocket socket;
-  socket.connect( Address( "10.0.0.1", "8889" ) );
+  socket.connect( Address( "100.64.0.1", "8889" ) );
   //socket.connect( Address( "0", "8889" ) );
   socket.set_timestamps();
 
@@ -254,7 +254,7 @@ int main( int argc, char *argv[] )
       return ResultType::Continue;
     }, [&]() { 
       std::chrono::duration<double, std::ratio<1,1000>> diff = (system_clock::now() - fetch_start); // in millis
-      return diff.count() >= (50) && !abr.stop_encode; 
+      return diff.count() >= (33) && !abr.stop_encode; 
     } ) 
   );
 

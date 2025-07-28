@@ -219,6 +219,7 @@ class CongCtrl
 
             // Query the rust static library
             ExternalBeliefBound bb;
+            //cout << HISTORY_SIZE << endl;
             compute_belief_bounds_c(&historys[0], HISTORY_SIZE, &bb);
             //std::cout << "New max allowed rate is: " << bb.rate << std::endl;
             // Update the belief bound
@@ -235,7 +236,7 @@ class CongCtrl
             if (bb.max_c < MAX_BANDWIDTH) {
                 // Converging should happen at least for 1s
                 beliefs.max_c = bb.max_c / scaling;
-                counter = 20;
+                counter = 200;
             }
             if (counter == 0) {
                 beliefs.max_c = bb.max_c / scaling;

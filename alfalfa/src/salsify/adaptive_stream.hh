@@ -473,7 +473,7 @@ class ABR {
                     encoded_output_by_rtt[2] =  FECPre{connection_id};
                 }
 
-                if ((pacer.size() + cc.beliefs.max_q) > cc.beliefs.min_c * 1) {
+                if ((pacer.size() + cc.beliefs.max_q) > (cc.beliefs.min_c * 1.25)) {
                     stop_encode = true;
                     cout << "Action: Stop encoding" << endl;
                 }
