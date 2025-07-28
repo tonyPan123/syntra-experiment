@@ -73,3 +73,10 @@ mv src/* .
 gn gen out/Default
 ninja -C out/Default peerconnection_gcc
 ```
+Fetch the benchmark video and convert it into yuv420p format:
+```
+pip install -U yt-dlp
+yt-dlp -f "bestvideo[height=720][ext=mp4]" "https://www.youtube.com/watch?v=hkmnhcsvueE"
+ffmpeg -i WATCH：\ White\ House\ Press\ Secretary\ Kayleigh\ McEnany\ briefs\ reporters\ \[hkmnhcsvueE\].mp4 -pix_fmt yuv420p benchmark.y4m
+```
+
