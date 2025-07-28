@@ -60,3 +60,16 @@ You need to delete
 ```
 BASE_LDADD = ../input/libalfalfainput.a ../decoder/libalfalfadecoder.a ../util/libalfalfautil.a /usr/lib/x86_64-linux-gnu/libx264.a $(X264_LIBS)
 ```
+WebRTC-gcc baseline:
+Install Depot tools first
+```
+git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+export PATH=/path/to/depot_tools:$PATH
+```
+In AlphaRTC
+```
+gclient sync // This may fail once
+mv src/* .
+gn gen out/Default
+ninja -C out/Default peerconnection_gcc
+```
