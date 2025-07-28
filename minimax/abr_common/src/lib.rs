@@ -10,11 +10,11 @@ use cc_common::*;
 
 
 //pub const FRAME_RATE: RealNumInt = 1; // frames decision per rtprop
-pub const MAX_FRAME_LATENCY: RealNumInt = 5; // # of rtprop (at least 1 considering the non-determinsim in the environment model)
+pub const MAX_FRAME_LATENCY: RealNumInt = 6; // # of rtprop (at least 1 considering the non-determinsim in the environment model)
 pub const MIN_FRAME_SIZE: RealNumRep = RealNumRep::new_raw(5, 1); 
 //pub const DECODING_ERR: RealNumRep = RealNumRep::new_raw(1, 100);
 pub const ENCODING_MAX_FACTOR: RealNumRep = RealNumRep::new_raw(1, 1); 
-pub const ENCODING_MIN_FACTOR: RealNumRep = RealNumRep::new_raw(1, 2); 
+pub const ENCODING_MIN_FACTOR: RealNumRep = RealNumRep::new_raw(1, 1); 
 pub const ENCODING_LIMIT: RealNumInt = 1; // maximum frame that can be parallelly encoded in one step (one rtprop)
 pub const ENCODING_DELAY: RealNumInt = 1; // # of rtprop needed to finish the encoding, should be >= 1
 pub const FRAME_RATE: RealNumInt = 1; // # of frames per rtprops 
@@ -191,7 +191,8 @@ impl<O: cc_common::Observation> ObservationABR<O> {
         for (t, loss) in cca_observation.get_lo() {
             if loss > prev_loss {
                 // Get the lost frames using the convention
-                let mut focused_frames = if t == 0 { move_abr.frames_sent.clone() } else { relevant_history[relevant_history.len() - t].frames_sent.clone() };
+                //let mut focused_frames = if t == 0 { move_abr.frames_sent.clone() } else { relevant_history[relevant_history.len() - t].frames_sent.clone() };
+                let mut focused_frames = relevant_history[relevant_history.len() - 1 - t].frames_sent.clone();
                 focused_frames.reverse();
                 let mut loss_frames: Vec<FragmentedFrame> = vec![];
                 let mut leftover = loss - prev_loss;

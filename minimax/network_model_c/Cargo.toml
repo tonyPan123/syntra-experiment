@@ -16,6 +16,9 @@ ds = {path = "../ds"}
 cc_common = {path = "../cc_common"}
 network_model_nc = {path = "../network_model_nc"}
 
+[profile.release]
+panic = "unwind"
+
 [lib]
 name = "network_model_lib"
 crate-type = ["staticlib"]

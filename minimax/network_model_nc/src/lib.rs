@@ -19,20 +19,55 @@ lazy_static! {
     // The key is: (trace length, prior losses observed, total losses observed)
     pub static ref COMPUTE_L_OBS: HashMap<(i32, i32, i32), QeFun> =
         HashMap::from([
+            ((2, 0, 0), compute_l_0_t_2_l_0 as QeFun),
+            ((3, 0, 0), compute_l_0_t_3_l_0 as QeFun),
+            ((4, 0, 0), compute_l_0_t_4_l_0 as QeFun),
+            ((5, 0, 0), compute_l_0_t_5_l_0 as QeFun),
             ((6, 0, 0), compute_l_0_t_6_l_0 as QeFun),
 
+            ((2, 1, 1), compute_l_1_t_2_l_1_nl_0 as QeFun),
+            ((2, 0, 1), compute_l_1_t_2_l_0_nl_0 as QeFun),
+            ((3, 1, 1), compute_l_1_t_3_l_1_nl_0 as QeFun),
+            ((3, 0, 1), compute_l_1_t_3_l_0_nl_0 as QeFun),
+            ((4, 1, 1), compute_l_1_t_4_l_1_nl_0 as QeFun),
+            ((4, 0, 1), compute_l_1_t_4_l_0_nl_0 as QeFun),
+            ((5, 1, 1), compute_l_1_t_5_l_1_nl_0 as QeFun),
+            ((5, 0, 1), compute_l_1_t_5_l_0_nl_0 as QeFun),
             ((6, 1, 1), compute_l_1_t_6_l_1_nl_0 as QeFun),
             ((6, 0, 1), compute_l_1_t_6_l_0_nl_0 as QeFun),
 
+
+            ((3, 2, 2), compute_l_2_t_3_l_2_nl_1 as QeFun),
+            ((3, 1, 2), compute_l_2_t_3_l_1_nl_1 as QeFun),
+            ((3, 0, 2), compute_l_2_t_3_l_0_nl_1 as QeFun),
+            ((4, 2, 2), compute_l_2_t_4_l_2_nl_1 as QeFun),
+            ((4, 1, 2), compute_l_2_t_4_l_1_nl_1 as QeFun),
+            ((4, 0, 2), compute_l_2_t_4_l_0_nl_1 as QeFun),
+            ((5, 2, 2), compute_l_2_t_5_l_2_nl_1 as QeFun),
+            ((5, 1, 2), compute_l_2_t_5_l_1_nl_1 as QeFun),
+            ((5, 0, 2), compute_l_2_t_5_l_0_nl_1 as QeFun),
             ((6, 2, 2), compute_l_2_t_6_l_2_nl_1 as QeFun),
             ((6, 1, 2), compute_l_2_t_6_l_1_nl_1 as QeFun),
             ((6, 0, 2), compute_l_2_t_6_l_0_nl_1 as QeFun),
 
+            ((4, 3, 3), compute_l_3_t_4_l_3_nl_2 as QeFun),
+            ((4, 2, 3), compute_l_3_t_4_l_2_nl_2 as QeFun),
+            ((4, 1, 3), compute_l_3_t_4_l_1_nl_2 as QeFun),
+            ((4, 0, 3), compute_l_3_t_4_l_0_nl_2 as QeFun),
+            ((5, 3, 3), compute_l_3_t_5_l_3_nl_2 as QeFun),
+            ((5, 2, 3), compute_l_3_t_5_l_2_nl_2 as QeFun),
+            ((5, 1, 3), compute_l_3_t_5_l_1_nl_2 as QeFun),
+            ((5, 0, 3), compute_l_3_t_5_l_0_nl_2 as QeFun),
             ((6, 3, 3), compute_l_3_t_6_l_3_nl_2 as QeFun),
             ((6, 2, 3), compute_l_3_t_6_l_2_nl_2 as QeFun),
             ((6, 1, 3), compute_l_3_t_6_l_1_nl_2 as QeFun),
             ((6, 0, 3), compute_l_3_t_6_l_0_nl_2 as QeFun),
 
+            ((5, 4, 4), compute_l_4_t_5_l_4_nl_3 as QeFun),
+            ((5, 3, 4), compute_l_4_t_5_l_3_nl_3 as QeFun),
+            ((5, 2, 4), compute_l_4_t_5_l_2_nl_3 as QeFun),
+            ((5, 1, 4), compute_l_4_t_5_l_1_nl_3 as QeFun),
+            ((5, 0, 4), compute_l_4_t_5_l_0_nl_3 as QeFun),
             ((6, 4, 4), compute_l_4_t_6_l_4_nl_3 as QeFun),
             ((6, 3, 4), compute_l_4_t_6_l_3_nl_3 as QeFun),
             ((6, 2, 4), compute_l_4_t_6_l_2_nl_3 as QeFun),
@@ -45,6 +80,61 @@ lazy_static! {
             ((6, 2, 5), compute_l_5_t_6_l_2_nl_4 as QeFun),
             ((6, 1, 5), compute_l_5_t_6_l_1_nl_4 as QeFun),
             ((6, 0, 5), compute_l_5_t_6_l_0_nl_4 as QeFun),
+        ]);
+        pub static ref COMPUTE_Q: HashMap<(i32, i32), QeFun> = HashMap::from([
+            ((6, 0), compute_q_5_t_6_l_0 as QeFun),
+            ((6, 1), compute_q_5_t_6_l_1 as QeFun),
+            ((6, 2), compute_q_5_t_6_l_2 as QeFun),
+            ((6, 3), compute_q_5_t_6_l_3 as QeFun),
+            ((6, 4), compute_q_5_t_6_l_4 as QeFun),
+            ((6, 5), compute_q_5_t_6_l_5 as QeFun),
+            ((6, 6), compute_q_5_t_6_l_6 as QeFun),
+            ((5, 0), compute_q_4_t_5_l_0 as QeFun),
+            ((5, 1), compute_q_4_t_5_l_1 as QeFun),
+            ((5, 2), compute_q_4_t_5_l_2 as QeFun),
+            ((5, 3), compute_q_4_t_5_l_3 as QeFun),
+            ((5, 4), compute_q_4_t_5_l_4 as QeFun),
+            ((5, 5), compute_q_4_t_5_l_5 as QeFun),
+            ((5, 0), compute_q_4_t_5_l_0 as QeFun),
+            ((5, 1), compute_q_4_t_5_l_1 as QeFun),
+            ((5, 2), compute_q_4_t_5_l_2 as QeFun),
+            ((5, 3), compute_q_4_t_5_l_3 as QeFun),
+            ((5, 4), compute_q_4_t_5_l_4 as QeFun),
+            ((5, 5), compute_q_4_t_5_l_5 as QeFun),
+            ((4, 0), compute_q_3_t_4_l_0 as QeFun),
+            ((4, 1), compute_q_3_t_4_l_1 as QeFun),
+            ((4, 2), compute_q_3_t_4_l_2 as QeFun),
+            ((4, 3), compute_q_3_t_4_l_3 as QeFun),
+            ((4, 4), compute_q_3_t_4_l_4 as QeFun),
+            ((3, 0), compute_q_2_t_3_l_0 as QeFun),
+            ((3, 1), compute_q_2_t_3_l_1 as QeFun),
+            ((3, 2), compute_q_2_t_3_l_2 as QeFun),
+            ((3, 3), compute_q_2_t_3_l_3 as QeFun),
+            ((2, 0), compute_q_1_t_2_l_0 as QeFun),
+            ((2, 1), compute_q_1_t_2_l_1 as QeFun),
+            ((2, 2), compute_q_1_t_2_l_2 as QeFun),
+        ]);
+        pub static ref COMPUTE_S: HashMap<(i32, i32), QeFun> = HashMap::from([
+            ((6, 0), compute_s_5_t_6_l_0 as QeFun),
+            ((6, 1), compute_s_5_t_6_l_1 as QeFun),
+            ((6, 2), compute_s_5_t_6_l_2 as QeFun),
+            ((6, 3), compute_s_5_t_6_l_3 as QeFun),
+            ((6, 4), compute_s_5_t_6_l_4 as QeFun),
+            ((6, 5), compute_s_5_t_6_l_5 as QeFun),
+            ((5, 0), compute_s_4_t_5_l_0 as QeFun),
+            ((5, 1), compute_s_4_t_5_l_1 as QeFun),
+            ((5, 2), compute_s_4_t_5_l_2 as QeFun),
+            ((5, 3), compute_s_4_t_5_l_3 as QeFun),
+            ((5, 4), compute_s_4_t_5_l_4 as QeFun),
+            ((4, 0), compute_s_3_t_4_l_0 as QeFun),
+            ((4, 1), compute_s_3_t_4_l_1 as QeFun),
+            ((4, 2), compute_s_3_t_4_l_2 as QeFun),
+            ((4, 3), compute_s_3_t_4_l_3 as QeFun),
+            ((3, 0), compute_s_2_t_3_l_0 as QeFun),
+            ((3, 1), compute_s_2_t_3_l_1 as QeFun),
+            ((3, 2), compute_s_2_t_3_l_2 as QeFun),
+            ((2, 0), compute_s_1_t_2_l_0 as QeFun),
+            ((2, 1), compute_s_1_t_2_l_1 as QeFun),
         ]);
 }
 
@@ -252,11 +342,11 @@ impl NetworkModel for NetworkModelNC {
     ) -> Vec<Self::NA> {
         let paths = self.get_discretized_paths(relevant_history, move_cca);
         let mut ret = Vec::new();
-
+        assert!(HISTORY_SIZE == FEASIBLE_SIZE + 1);
         for path in paths {
             let (c, b) = path;
             //print!("{:?}\n", path);
-            let pos = 1 + relevant_history.len() - FEASIBLE_SIZE;
+            let pos = 1 + relevant_history.len() - HISTORY_SIZE;
             let feasible_moves = self.compute_feasible_network_moves_given_path(&relevant_history[pos..], move_cca, c, b);
             ret.extend(feasible_moves);
         }
@@ -286,28 +376,35 @@ impl NetworkModel for NetworkModelNC {
         measurement_interval: u32,
     ) -> Option<RealNumRep> {
         //unimplemented!("Need to re-implement max allowed rate computation");
-        let (a, l, s, l0) = NetworkModelNC::get_observation_vectors(relevant_history, move_cca);
+        assert!(*move_cca == None);
+        let mut max_rate: RealNumRep = LARGEST_BW.into();
+        let qdels = self.compute_queue_delay(relevant_history, move_cca);
+        for (c, b, _, max_q) in qdels {
+            assert!(max_q <= b);
+            max_rate = std::cmp::min(max_rate, c + b - max_q + loss_tolerance_abs);
+        }
+        Some(std::cmp::max(max_rate, ALPHA.into()))
+
+        /* 
+        assert!(*move_cca == None);
+        let (a, l, s, l0) = NetworkModelNC::get_observation_vectors(&relevant_history[1..], &Some(CCAAction{rate: 0.into()}));
         let tsteps = a.len() as i32;
         let n_losses_observed = l.len() as i32;
 
         let mut max_rate: RealNumRep = LARGEST_BW.into();
         for (c, b) in self.get_discretized_paths(relevant_history, move_cca) {
-            let mut q_interval = COMPUTE_Q_5[&(tsteps, n_losses_observed)](&a, &l, &s, l0, c, b);
-            assert!(!q_interval.is_empty());
-            if n_losses_observed == tsteps {
-                // In this case, due to our simplification process in QE, we remove
-                // the Q=0 constraint.
-
-                // TODO: Verify if this affects other QE outputs semantically.
-                q_interval = IntervalList::interval_point(Bound::Included(0.into()));
-            }
+            let q_interval: IntervalList<RealNumRep> = if n_losses_observed == tsteps - 1 && a[tsteps as usize - 1] == a[tsteps as usize - 2] {
+                IntervalList::interval_point(Bound::Included(0.into()))
+            } else {
+                COMPUTE_Q_5[&(tsteps, n_losses_observed)](&a, &l, &s, l0, c, b)
+            };
             assert!(!q_interval.is_empty());
             assert!(my_max(&q_interval) <= b);
             //max_q = std::cmp::min(my_max(&q_interval), b);
             max_rate = std::cmp::min(max_rate, c + b - my_max(&q_interval) + loss_tolerance_abs);
         }
         Some(std::cmp::max(max_rate, ALPHA.into()))
-
+        */
         // let (a, l, s, l0) = NetworkModelNC::get_observation_vectors(relevant_history, move_cca);
         // assert_eq!(s.len(), a.len());
         // let tsteps = a.len() as i32 + 1;
@@ -348,7 +445,7 @@ impl NetworkModel for NetworkModelNC {
 
         let mut c_interval = COMPUTE_C[&(tsteps, n_losses_observed)](&a, &l, &s, l0);
         c_interval = c_interval.intersection(&IntervalList::interval_bounded(
-            Bound::Included(0.into()),
+            Bound::Included(SMALLEST_BW.into()),
             Bound::Included(LARGEST_BW.into()),
         ));
         assert!(!c_interval.is_empty());
@@ -358,11 +455,11 @@ impl NetworkModel for NetworkModelNC {
         let c_vals = NetworkModelNC::discretize_interval(&c_interval, N_DISCRETE_POINTS);
 
         let mut min_b: RealNumRep = LARGEST_BW.into();
-        let mut max_b: RealNumRep = 0.into();
+        let mut max_b: RealNumRep = SMALLEST_BW.into();
         for c_val in c_vals {
             let mut b_interval = COMPUTE_B[&(tsteps, n_losses_observed)](&a, &l, &s, l0, c_val);
             b_interval = b_interval.intersection(&IntervalList::interval_bounded(
-                Bound::Included(0.into()),
+                Bound::Included(SMALLEST_BW.into()),
                 Bound::Included(LARGEST_BW.into()),
             ));
             assert!(!b_interval.is_empty());
@@ -375,26 +472,41 @@ impl NetworkModel for NetworkModelNC {
         // well (or we can just start with history of all 0s), this actually
         // sounds easier to try out. TODO: Rename to q_last in the hashmap For
         // loss need to keep L_idx
+        //let (a, l, s, l0) = NetworkModelNC::get_observation_vectors(&relevant_history[1..], &Some(CCAAction{rate: 0.into()}));
+        //let tsteps = a.len() as i32;
+        //let n_losses_observed = l.len() as i32;
 
-        let mut min_q: RealNumRep = RealNumInt::max_value().into();
-        let mut max_q: RealNumRep = 0.into();
+        //let mut min_q: RealNumRep = RealNumInt::max_value().into();
+        //let mut max_q: RealNumRep = 0.into();
         // TODO: better way to do this? ^^^
         // TODO: avoid doing C, B multiple times here...
-        for (c, b) in self.get_discretized_paths(relevant_history, move_cca) {
-            let mut q_interval = COMPUTE_Q_5[&(tsteps, n_losses_observed)](&a, &l, &s, l0, c, b);
-            assert!(!q_interval.is_empty());
-            if n_losses_observed == tsteps {
+        //for (c, b) in self.get_discretized_paths(relevant_history, move_cca) {
+        //    println!("{:?},{:?}!", c, b);
+        //    let q_interval: IntervalList<RealNumRep> = if n_losses_observed == tsteps - 1 && a[tsteps as usize - 1] == a[tsteps as usize - 2] {
+        //        IntervalList::interval_point(Bound::Included(0.into()))
+        //    } else {
+        //        COMPUTE_Q_5[&(tsteps, n_losses_observed)](&a, &l, &s, l0, c, b)
+        //    };
+            //COMPUTE_Q_5[&(tsteps, n_losses_observed)](&a, &l, &s, l0, c, b);
+            //assert!(!q_interval.is_empty());
+            //if n_losses_observed == tsteps {
                 // In this case, due to our simplification process in QE, we remove
                 // the Q=0 constraint.
 
                 // TODO: Verify if this affects other QE outputs semantically.
-                q_interval = IntervalList::interval_point(Bound::Included(0.into()));
-            }
-            assert!(!q_interval.is_empty());
-            min_q = std::cmp::min(min_q, my_min(&q_interval));
-            max_q = std::cmp::max(max_q, my_max(&q_interval));
+                //q_interval = IntervalList::interval_point(Bound::Included(0.into()));
+            //}
+        //    assert!(!q_interval.is_empty());
+        //    min_q = std::cmp::min(min_q, my_min(&q_interval));
+        //    max_q = std::cmp::max(max_q, my_max(&q_interval));
+        //}
+        let mut min_q: RealNumRep = RealNumInt::max_value().into();
+        let mut max_q: RealNumRep = 0.into();
+        let qdels = self.compute_queue_delay(relevant_history, move_cca);
+        for (_, _, local_min_q, local_max_q) in qdels {
+            min_q = std::cmp::min(min_q, local_min_q);
+            max_q = std::cmp::max(max_q,local_max_q);
         }
-
         // let l_interval = if n_losses_observed as usize == FEASIBLE_SIZE {
         //     IntervalList::interval_bounded(l[4], l[4])
         // } else {
@@ -423,6 +535,49 @@ impl NetworkModel for NetworkModelNC {
             min_if: inflight,
             max_if: inflight,
         }
+    }
+
+    fn compute_queue_delay(&self, relevant_history: &[Self::O], move_cca: &Option<CCAAction>) -> Vec<(RealNumRep, RealNumRep, RealNumRep, RealNumRep)> {
+        let paths = self.get_discretized_paths(relevant_history, move_cca);
+        assert!(HISTORY_SIZE == FEASIBLE_SIZE + 1);
+        let mut new_history = vec![];
+        for i in relevant_history {
+            new_history.push(i.clone());
+        }
+        let dummy = &Some(CCAAction{rate: 0.into()});
+
+        //let mut min_q: RealNumRep = RealNumInt::max_value().into();
+        //let mut max_q: RealNumRep = 0.into();
+        let mut ret = vec![];
+        for path in paths {
+            let (c, b) = path;
+            //print!("{:?}\n", path);
+            let pos = if relevant_history.len() < HISTORY_SIZE {1} else {1 + relevant_history.len() - HISTORY_SIZE};
+            let feasible_moves = self.compute_feasible_network_moves_given_path(&relevant_history[pos..], &dummy, c, b);
+            for feasible_move in feasible_moves {
+                new_history.push(self.compute_observation(new_history.last().unwrap(), &feasible_move, &dummy));
+                let (a, l, s, l0) = 
+                    NetworkModelNC::get_observation_vectors(&new_history[pos..], &None);
+                let tsteps = a.len() as i32;
+                let n_losses_observed = l.len() as i32;
+
+                let mut q_interval = COMPUTE_Q[&(tsteps, n_losses_observed)](&a, &l, &s, l0, c, b);
+                assert!(!q_interval.is_empty());
+                if n_losses_observed == tsteps {
+                    // In this case, due to our simplification process in QE, we remove
+                    // the Q=0 constraint.
+
+                    // TODO: Verify if this affects other QE outputs semantically.
+                    q_interval = IntervalList::interval_point(Bound::Included(0.into()));
+                }
+                assert!(!q_interval.is_empty());
+                ret.push((c,b,my_min(&q_interval), my_max(&q_interval)));
+                //min_q = std::cmp::min(min_q, my_min(&q_interval));
+                //max_q = std::cmp::max(max_q, my_max(&q_interval));
+                new_history.pop();
+            }
+        }
+        ret
     }
 
     fn get_network_move_sim(
@@ -505,7 +660,7 @@ impl NetworkModel for NetworkModelNC {
     fn get_initial_history(&self) -> Vec<Self::O> {
         
         let mut ret = Vec::new();
-        for t in 0..FEASIBLE_SIZE {
+        for t in 0..HISTORY_SIZE {
             // Since I started adding C >= 5, don't need to add history that
             // tries to increase C.
 
@@ -834,12 +989,16 @@ impl NetworkModelNC {
     ) -> Vec<(RealNumRep, RealNumRep)> {
         //return self.get_discretized_paths_original(&relevant_history[relevant_history.len() - FEASIBLE_SIZE..relevant_history.len()], move_cca);
         let mut c_interval_all= IntervalList::interval_bounded(
-            Bound::Included(0.into()),
+            Bound::Included(SMALLEST_BW.into()),
             Bound::Included(LARGEST_BW.into()),
         );
         // 0 corresponding to the real trace 
-        for ptr in [0,relevant_history.len() - FEASIBLE_SIZE] {
-            let rh = &relevant_history[ptr .. (ptr + FEASIBLE_SIZE)];
+        assert!(HISTORY_SIZE == FEASIBLE_SIZE + 1);
+        if relevant_history.len() < HISTORY_SIZE {
+            return self.get_discretized_paths_original(&relevant_history, move_cca)
+        }
+        for ptr in [0,relevant_history.len() - HISTORY_SIZE] {
+            let rh = &relevant_history[ptr .. (ptr + HISTORY_SIZE)];
             // TODO: Can cache this or the whole function
             let (a, l, s, l0) = NetworkModelNC::get_observation_vectors(rh, move_cca);
             // a.len() may not be equal to s.len() since we use this in belief
@@ -851,7 +1010,7 @@ impl NetworkModelNC {
             c_interval_all = c_interval_all.intersection(&c_interval);
             //assert!(!c_interval_all.is_empty());
             if c_interval_all.is_empty() {
-                return self.get_discretized_paths_original(&relevant_history[relevant_history.len() - FEASIBLE_SIZE..relevant_history.len()], move_cca)
+                return self.get_discretized_paths_original(&relevant_history[relevant_history.len() - HISTORY_SIZE..relevant_history.len()], move_cca)
             }
         }
         let c_vals = NetworkModelNC:: discretize_interval(&c_interval_all, N_DISCRETE_POINTS);
@@ -859,11 +1018,11 @@ impl NetworkModelNC {
         let mut ret = Vec::new();
         for c_val in c_vals.clone() {
             let mut b_interval_all= IntervalList::interval_bounded(
-                Bound::Included(0.into()),
+                Bound::Included(SMALLEST_BW.into()),
                 Bound::Included(LARGEST_BW.into()),
             );
-            for ptr in [0,relevant_history.len() - FEASIBLE_SIZE] {
-                let rh = &relevant_history[ptr .. (ptr + FEASIBLE_SIZE)];
+            for ptr in [0,relevant_history.len() - HISTORY_SIZE] {
+                let rh = &relevant_history[ptr .. (ptr + HISTORY_SIZE)];
                 let (a, l, s, l0) = NetworkModelNC::get_observation_vectors(rh, move_cca);
                 let tsteps = s.len() as i32;
                 let n_losses_observed = l.len() as i32;
@@ -890,7 +1049,7 @@ impl NetworkModelNC {
         }
         //assert!(!ret.is_empty());
         if ret.is_empty() {
-            return self.get_discretized_paths_original(&relevant_history[relevant_history.len() - FEASIBLE_SIZE..relevant_history.len()], move_cca)
+            return self.get_discretized_paths_original(&relevant_history[relevant_history.len() - HISTORY_SIZE..relevant_history.len()], move_cca)
         }
         ret
 
@@ -908,7 +1067,7 @@ impl NetworkModelNC {
         let tsteps = s.len() as i32;
         let n_losses_observed = l.len() as i32;
 
-        assert!(FEASIBLE_SIZE == tsteps as usize);
+        assert!(FEASIBLE_SIZE >= tsteps as usize);
         let mut c_interval = COMPUTE_C[&(tsteps, n_losses_observed)](&a, &l, &s, l0);
         c_interval = c_interval.intersection(&IntervalList::interval_bounded(
             Bound::Included(0.into()),
@@ -947,7 +1106,7 @@ impl NetworkModelNC {
         let tsteps = a.len() as i32;
         let n_losses_observed = l.len() as i32;
 
-        let s_interval = COMPUTE_S_5[&(tsteps, n_losses_observed)](&a, &l, &s, l0, c, b);
+        let s_interval = COMPUTE_S[&(tsteps, n_losses_observed)](&a, &l, &s, l0, c, b);
         assert!(s_interval.is_contiguous_interval());
         let min_s = my_min(&s_interval);
         let max_s = my_max(&s_interval);
@@ -959,10 +1118,10 @@ impl NetworkModelNC {
         }
 
         // Heuristics, add lowest s such that no delay
-        let extra_discret = a.get(a.len() - 2).unwrap().clone();
-        if extra_discret > min_s && extra_discret < max_s {
-            s_vals.push(extra_discret);
-        }
+        //let extra_discret = a.get(a.len() - 2).unwrap().clone();
+        //if extra_discret > min_s && extra_discret < max_s {
+        //    s_vals.push(extra_discret);
+        //}
 
         // // TODO: Adapt N_DISCRETE_POINTS based on how close min_s and max_s are
         // // (when both are divided by ALPHA).
@@ -1097,16 +1256,17 @@ impl NetworkModelNC {
         let mut l = Vec::new();
         let mut s = Vec::new();
         let mut l0: RealNumRep = 0.into();  // The last loss obs made.
-        for i in 0..relevant_history.len() {
+        for i in 1..relevant_history.len() {
             let obs = &relevant_history[i];
-            a.push(obs.a);
+            // Use previous a
+            a.push(relevant_history[i-1].a);
             s.push(obs.s);
             for j in 0..obs.lo.len() {
                 l0 = std::cmp::max(l0, obs.lo[j].l);
-                if obs.lo[j].t > i {
+                if obs.lo[j].t > i - 1 {
                     continue;
                 }
-                let t = i - obs.lo[j].t;
+                let t = i - 1 - obs.lo[j].t;
                 assert!(t <= l.len());
                 if t == l.len() {
                     l.push(obs.lo[j].l);
@@ -1116,7 +1276,8 @@ impl NetworkModelNC {
             }
         }
         if let Some(cca) = move_cca {
-            a.push(*a.last().unwrap() + cca.rate);
+            //a.push(*a.last().unwrap() + cca.rate);
+            a.push(relevant_history.last().unwrap().a);
         }
         if !l.is_empty() {
             l0 = l.first().unwrap().clone();
@@ -1355,6 +1516,96 @@ mod tests {
         let network_model = NetworkModelNC::new();
         let len = obs.len();
         let res = network_model.compute_min_c_b_sum(&obs[0..6], &None);
+
+        print!("{:?}", res);
+        print!("{:?}", res.unwrap().to_f64());
+    }
+
+    #[test]
+    fn debug_max_rate() {
+        let mut obs = vec![];
+        obs.push(
+            ObservationNC {
+                a: 0.into(),
+                s: 0.into(),
+                lo: vec![LossObservation {
+                    t: 0,
+                    l: 0.into(), // it is in discretization unit of packet
+                }],
+
+            }
+        );
+        obs.push(
+            ObservationNC {
+                a: 0.into(),
+                s: 0.into(),
+                lo: vec![LossObservation {
+                    t: 0,
+                    l: 0.into(), // it is in discretization unit of packet
+                }],
+
+            }
+        );
+        obs.push(
+            ObservationNC {
+                a: 0.into(),
+                s: 0.into(),
+                lo: vec![LossObservation {
+                    t: 0,
+                    l: 0.into(), // it is in discretization unit of packet
+                }],
+
+            }
+        );
+        obs.push(
+            ObservationNC {
+                a: 0.into(),
+                s: 0.into(),
+                lo: vec![LossObservation {
+                    t: 0,
+                    l: 0.into(), // it is in discretization unit of packet
+                }],
+
+            }
+        );
+        obs.push(
+            ObservationNC {
+                a: 0.into(),
+                s: 0.into(),
+                lo: vec![LossObservation {
+                    t: 0,
+                    l: 0.into(), // it is in discretization unit of packet
+                }],
+
+            }
+        );
+        obs.push(
+            ObservationNC {
+                a: 0.into(),
+                s: 0.into(),
+                lo: vec![LossObservation {
+                    t: 0,
+                    l: 0.into(), // it is in discretization unit of packet
+                }],
+
+            }
+        );
+        obs.push(
+            ObservationNC {
+                a: 12.into(),
+                s: 0.into(),
+                lo: vec![LossObservation {
+                    t: 0,
+                    l: 0.into(), // it is in discretization unit of packet
+                }],
+
+            }
+        );
+        //let move_cca = None;
+
+        let network_model = NetworkModelNC::new();
+        let len = obs.len();
+        let res = network_model.compute_max_allowed_rate(&obs, &None, 0.into(), 0.into(), 0);
 
         print!("{:?}", res);
         print!("{:?}", res.unwrap().to_f64());

@@ -235,15 +235,16 @@ impl<S: State> Search<S> {
         };
 
         // Do the actual computation. This is the main loop
-        for d in 4..depth + 1
+        for d in depth..depth + 1
         {
             if d % 2 == 1 {
                 continue;
             }
             //let d = depth;
             state.reset_moves();
-            if d == depth{
+            if d == depth {
                 self.deepen_tree(state, d, S::V::neg_inf(), S::V::inf(), stop_flag.clone(), false);
+                //self.deepen_tree(state, d, S::V::neg_inf(), S::V::inf(), stop_flag.clone(), true);
             } else {
                 self.deepen_tree(state, d, S::V::neg_inf(), S::V::inf(), stop_flag.clone(), true);
             }
@@ -253,6 +254,7 @@ impl<S: State> Search<S> {
                     break;
                 }
 
+                println!("Depth {d} move {m:?} value{v:?}");
                 println!("Depth {d} move {m:?}");
             }
 

@@ -406,7 +406,7 @@ impl<NM: NetworkModel> CongCtrlState<NM> {
             } else {
                 Some(self.move_cca.unwrap().rate)
             },
-            history: self.get_relevant_history(Some(FEASIBLE_SIZE)),
+            history: self.get_relevant_history(Some(HISTORY_SIZE)),
             belief_bounds: *self.get_latest_belief_bounds(),
             metrics: self.compute_metrics(),
             chosen_move: None,
@@ -534,22 +534,22 @@ impl<NM: NetworkModel> CongCtrlState<NM> {
         }
 
         // This should be true when speculation size is of even size
-        let minc_minb_sum = self.network_model.compute_min_c_b_sum(&self.get_relevant_history(Some(FEASIBLE_SIZE)), &None).unwrap();
+        let minc_minb_sum = self.network_model.compute_min_c_b_sum(&self.get_relevant_history(Some(HISTORY_SIZE)), &None).unwrap();
         let mut time_to_c_b = (HISTORY_SIZE + SPECULATION_SIZE + 1) as RealNumInt;
-        let relevant_history = &self.get_relevant_history(Some(FEASIBLE_SIZE + self.history_stack.len()));
-        for ptr in 0..relevant_history.len() - FEASIBLE_SIZE + 1 {
-            let rh = &relevant_history[ptr .. (ptr + FEASIBLE_SIZE)];
+        let relevant_history = &self.get_relevant_history(Some(HISTORY_SIZE + self.history_stack.len()));
+        for ptr in 0..relevant_history.len() - HISTORY_SIZE + 1 {
+            let rh = &relevant_history[ptr .. (ptr + HISTORY_SIZE)];
             if self.network_model.compute_min_c_b_sum(rh, &None).unwrap() >= minc_minb_sum {
                 time_to_c_b = (ptr - 1) as RealNumInt;
                 break;
             }
         }
-        let start_minc_minb_sum = self.network_model.compute_min_c_b_sum(&relevant_history[0 .. FEASIBLE_SIZE], &None).unwrap();
+        let start_minc_minb_sum = self.network_model.compute_min_c_b_sum(&relevant_history[0 .. HISTORY_SIZE], &None).unwrap();
         let mut time_to_shrink_minc_minb_add = (HISTORY_SIZE + SPECULATION_SIZE + 1) as RealNumInt;
-        for ptr in 0..relevant_history.len() - FEASIBLE_SIZE + 1 {
-            let rh = &relevant_history[ptr .. (ptr + FEASIBLE_SIZE)];
+        for ptr in 0..relevant_history.len() - HISTORY_SIZE + 1 {
+            let rh = &relevant_history[ptr .. (ptr + HISTORY_SIZE)];
             // Account for unsoundness during QE 
-            if self.network_model.compute_min_c_b_sum(rh, &None).unwrap() >= start_minc_minb_sum + self.loss_tolerance_abs * 2 - RealNumRep::new_raw(1, 1 << 4){
+            if self.network_model.compute_min_c_b_sum(rh, &None).unwrap() >= start_minc_minb_sum + self.loss_tolerance_abs * 1 - RealNumRep::new_raw(1, 1 << 4){
                 time_to_shrink_minc_minb_add = (ptr - 1) as RealNumInt;
                 break;
             }
@@ -578,7 +578,7 @@ impl<NM: NetworkModel> CongCtrlState<NM> {
             time_to_shrink_c,
             //loss_tol: last.get_ld() <= latest.min_c,
             //loss_tol,
-            loss_tol: (last.get_ld() - first.get_ld()) <= self.loss_tolerance_abs * 2,
+            loss_tol: (last.get_ld() - first.get_ld()) <= self.loss_tolerance_abs * 1,
             time_to_shrink_c_l, 
             time_to_shrink_c_h,
             time_to_c,
@@ -645,7 +645,7 @@ impl<NM: NetworkModel> CongCtrlState<NM> {
         let ret = self
             .network_model
             //.compute_feasible_network_moves(&self.get_relevant_history(Some(FEASIBLE_SIZE + self.history_stack.len())), &self.move_cca);
-            .compute_feasible_network_moves(&self.get_relevant_history(Some(FEASIBLE_SIZE + self.history_stack.len())), &self.move_cca);
+            .compute_feasible_network_moves(&self.get_relevant_history(Some(HISTORY_SIZE + self.history_stack.len())), &self.move_cca);
         //ret.into_iter().map(CCMove::Network).unique().collect()
         ret.into_iter().map(CCMove::Network).collect()
     }
@@ -655,7 +655,7 @@ impl<NM: NetworkModel> CongCtrlState<NM> {
         let start = std::time::Instant::now();
         let belief_bounds = self.get_latest_belief_bounds();
 
-        let rh = self.get_relevant_history(Some(FEASIBLE_SIZE));
+        let rh = self.get_relevant_history(Some(FEASIBLE_SIZE + 1));
         let mc = self.move_cca;
 
         let max_allowed_rate = self.network_model.compute_max_allowed_rate(
@@ -700,12 +700,12 @@ impl<NM: NetworkModel> CongCtrlState<NM> {
 
     fn compute_belief_bounds(&self) -> BeliefBounds {
         self.network_model
-            .compute_belief_bounds(&self.get_relevant_history(Some(FEASIBLE_SIZE)), &self.move_cca)
+            .compute_belief_bounds(&self.get_relevant_history(Some(FEASIBLE_SIZE + 1)), &self.move_cca)
     }
 
     fn get_network_move_sim(&self, args: &Args) -> Option<CCMove<NM::NA>> {
         self.network_model
-            .get_network_move_sim(&self.get_relevant_history(None), &self.move_cca, args.sim_ideal)
+            .get_network_move_sim(&self.get_relevant_history(Some(FEASIBLE_SIZE)), &self.move_cca, args.sim_ideal)
             .map(CCMove::Network)
     }
 
@@ -828,7 +828,7 @@ impl SimStrategy<'_> {
 
     fn get_rate<NM: NetworkModel>(&mut self, ccs: &CongCtrlState<NM>) -> Option<CCMove<NM::NA>> {
         let bb = ccs.get_latest_belief_bounds();
-        let history = ccs.get_relevant_history(Some(FEASIBLE_SIZE));
+        let history = ccs.get_relevant_history(Some(HISTORY_SIZE));
         let move_cca = ccs.move_cca;
         let n = history.len();
 

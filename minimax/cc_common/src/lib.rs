@@ -10,7 +10,7 @@ use num_traits::ToPrimitive;
 pub const ALPHA: RealNumInt = 1; // pkt size equivalent in Z3 encoding
 pub const SPECULATION_SIZE: usize = 10; // depth of deepen_tree
 pub const FEASIBLE_SIZE: usize = 6; // network model trace length
-pub const HISTORY_SIZE: usize = FEASIBLE_SIZE; // size of circular buffer in state
+pub const HISTORY_SIZE: usize = FEASIBLE_SIZE + 1; // size of circular buffer in state; need extra one for alignment
 pub const NC_HISTORY_SIZE: usize = 5; // amount of history we use in the QE.
 const_assert!(HISTORY_SIZE + 1 >= FEASIBLE_SIZE);
 pub const N_INTERP: usize = 4; // network actions interpolation
@@ -21,6 +21,7 @@ pub const N_THREADS: usize = 8;
 pub const ERR: RealNumRep = RealNumRep::new_raw(1, 1 << 4);
 // const LARGEST_BW: u64 = 100_000; // pkts per rtprop. For rtprop of 100ms, this is ~1.2 Gbps.
 // const LARGEST_SEQ: u64 = 100_000_000; // 1000 rtprop worth of service at LARGEST_BW. 100 seconds at 100 ms.
+pub const SMALLEST_BW: RealNumInt = 5; 
 pub const LARGEST_BW: RealNumInt = 1000; // pkts per rtprop. For rtprop of 100ms, this is ~120 Mbps.
 // pub const LARGEST_BW: RealNumInt = 120; // pkts per rtprop. For rtprop of 100ms, this is ~14.4 Mbps.
 
@@ -179,4 +180,6 @@ pub trait NetworkModel: Debug + Sized {
     fn compute_observation(&self, last: &Self::O, na: &Self::NA, move_cca: &Option<CCAAction>) -> Self::O;
 
     fn get_initial_history(&self) -> Vec<Self::O>;
+
+    fn compute_queue_delay(&self, relevant_history: &[Self::O], move_cca: &Option<CCAAction>) -> Vec<(RealNumRep, RealNumRep, RealNumRep, RealNumRep)>;
 }

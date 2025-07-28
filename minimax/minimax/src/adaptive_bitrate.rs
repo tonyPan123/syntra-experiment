@@ -106,7 +106,9 @@ const DEFAULT_PERMUTATION: &[&str] = &[
     //"ttsc", "ld", "sw", 
     //"lt", "schadd", "ttscbadd", "scb", "la", "f", "q",
     //"schadd", "scladd", "ttsc", "la", "f", "q", "c"
-    "la", "f", "schadd", "scladd", "ttsc", "q", "c"
+    //"la", "schadd", "scladd", "ttsc", "f", "q", "c"
+    //"la", "schadd", "ttscbadd", "f", "ttsc", "q", // Latency of 2
+    "la", "schadd", "ttsc", "ttscbadd", "c", "f", "q", // Latency of 4
 ];
 lazy_static! {
     static ref OBJ_PERMUTATION: Vec<String> = {
@@ -349,6 +351,7 @@ impl<NM: NetworkModel> minimax::State for AdaptiveBitrateState<NM> {
     // 1) encoding_result + cca_s_l
     // 2) cca_s_l
     fn best_move_sort(&mut self, tt: &minimax::TranspositionTable<Self>, tt_state: Self::T) {
+        // Check for dummy action
         if let Some((m, v, d)) = tt.get(&tt_state) {
             if self.maximizer() {
                 if let Some(ABRMove::Network(best_enc, best_na,)) = m.clone() { 
@@ -371,7 +374,7 @@ impl<NM: NetworkModel> minimax::State for AdaptiveBitrateState<NM> {
                             assert!(false);
                         }
                     }
-                    assert!(first_choice.len() == 1);
+                    //assert!(first_choice.len() == 1);
                     let mut sorted = vec![];
                     sorted.append(&mut left);
                     sorted.append(&mut second_choice);
@@ -407,15 +410,17 @@ impl<NM: NetworkModel> minimax::State for AdaptiveBitrateState<NM> {
                             assert!(false);
                         }
                     }
-                    let mut sorted = vec![];                
+                    let mut sorted = vec![]; 
+                    /*                
                     if first_choice.len() != 1 {
-                        print!("{:?}\n", best);
-                        print!("{:?}\n", first_choice);
-                        print!("{:?}\n", second_choice);
-                        print!("{:?}\n", third_choice);
-                        print!("{:?}\n", left);
+                        print!("Best: {:?}\n", best);
+                        print!("First: {:?}\n", first_choice);
+                        print!("Second: {:?}\n", second_choice);
+                        print!("Third: {:?}\n", third_choice);
+                        print!("Left: {:?}\n", left);
                     } 
                     assert!(first_choice.len() == 1);
+                    */
                     sorted.append(&mut left);
                     sorted.append(&mut third_choice);
                     sorted.append(&mut second_choice);
@@ -446,7 +451,7 @@ impl<NM: NetworkModel> minimax::State for AdaptiveBitrateState<NM> {
 
     fn make_move_depth(&mut self, m: &Self::M, depth: u16) {
         let mut new_encode = false;
-        if depth >= (SPECULATION_SIZE - 2) as u16 {
+        if depth >= (SPECULATION_SIZE) as u16 {
             new_encode = true;
         } 
         // TODO: cca can be 0 after a certain depth
@@ -472,7 +477,13 @@ impl<NM: NetworkModel> minimax::State for AdaptiveBitrateState<NM> {
                 );
                 self.move_abr = None;
                 self.belief_bounds_stack.push(self.compute_belief_bounds());
-                self.move_choices_abr_stack.push(self.compute_abr_moves_depth(new_encode));
+                if depth <= 3 {
+                    // Just make dummy move because it is impossible to observe its effect 
+                    self.move_choices_abr_stack.push(self.get_dummy_abr_action());
+                    //self.move_choices_abr_stack.push(self.compute_abr_moves_depth(new_encode));
+                } else {
+                    self.move_choices_abr_stack.push(self.compute_abr_moves_depth(new_encode));
+                }
             }
         }
         self.tree_make_move();
@@ -574,20 +585,30 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
             self.history.push_back(ObservationABR::new(obs));
         }
         // Initially, we push one encoded frame 
-        self.history.get_mut(FEASIBLE_SIZE - 3).unwrap().new_frames_encoding.push(Frame { index: 0, message_length: 5.into(), ago: 1.into() });
-        self.history.get_mut(FEASIBLE_SIZE - 3).unwrap().frames_encoded.push(Frame { index: 0, message_length: 5.into(), ago: 0.into() });
-        self.history.get_mut(FEASIBLE_SIZE - 3).unwrap().new_frames_encoded.push(Frame { index: 0, message_length: 5.into(), ago: 1.into() });
+        /* 
+        self.history.get_mut(HISTORY_SIZE - 3).unwrap().new_frames_encoding.push(Frame { index: 0, message_length: 5.into(), ago: 1.into() });
+        self.history.get_mut(HISTORY_SIZE - 3).unwrap().frames_encoded.push(Frame { index: 0, message_length: 5.into(), ago: 0.into() });
+        self.history.get_mut(HISTORY_SIZE - 3).unwrap().new_frames_encoded.push(Frame { index: 0, message_length: 5.into(), ago: 1.into() });
 
-        self.history.get_mut(FEASIBLE_SIZE - 2).unwrap().new_frames_encoding.push(Frame { index: 1, message_length: 5.into(), ago: 1.into() });
-        self.history.get_mut(FEASIBLE_SIZE - 2).unwrap().frames_encoded.push(Frame { index: 0, message_length: 5.into(), ago: 0.into() });
-        self.history.get_mut(FEASIBLE_SIZE - 2).unwrap().frames_encoded.push(Frame { index: 1, message_length: 3.into(), ago: 0.into() });
-        self.history.get_mut(FEASIBLE_SIZE - 2).unwrap().new_frames_encoded.push(Frame { index: 1, message_length: 3.into(), ago: 1.into() });
+        self.history.get_mut(HISTORY_SIZE - 2).unwrap().new_frames_encoding.push(Frame { index: 1, message_length: 5.into(), ago: 1.into() });
+        self.history.get_mut(HISTORY_SIZE - 2).unwrap().frames_encoded.push(Frame { index: 0, message_length: 5.into(), ago: 0.into() });
+        self.history.get_mut(HISTORY_SIZE - 2).unwrap().frames_encoded.push(Frame { index: 1, message_length: 3.into(), ago: 0.into() });
+        self.history.get_mut(HISTORY_SIZE - 2).unwrap().new_frames_encoded.push(Frame { index: 1, message_length: 3.into(), ago: 1.into() });
 
-        self.history.get_mut(FEASIBLE_SIZE - 1).unwrap().new_frames_encoding.push(Frame { index: 2, message_length: 5.into(), ago: 1.into() });
-        self.history.get_mut(FEASIBLE_SIZE - 1).unwrap().frames_encoded.push(Frame { index: 0, message_length: 5.into(), ago: 0.into() });
-        self.history.get_mut(FEASIBLE_SIZE - 1).unwrap().frames_encoded.push(Frame { index: 1, message_length: 3.into(), ago: 0.into() });
-        self.history.get_mut(FEASIBLE_SIZE - 1).unwrap().frames_encoded.push(Frame { index: 2, message_length: 3.into(), ago: 0.into() });
-        self.history.get_mut(FEASIBLE_SIZE - 1).unwrap().new_frames_encoded.push(Frame { index: 2, message_length: 3.into(), ago: 1.into() });
+        self.history.get_mut(HISTORY_SIZE - 1).unwrap().new_frames_encoding.push(Frame { index: 2, message_length: 5.into(), ago: 1.into() });
+        self.history.get_mut(HISTORY_SIZE - 1).unwrap().frames_encoded.push(Frame { index: 0, message_length: 5.into(), ago: 0.into() });
+        self.history.get_mut(HISTORY_SIZE - 1).unwrap().frames_encoded.push(Frame { index: 1, message_length: 3.into(), ago: 0.into() });
+        self.history.get_mut(HISTORY_SIZE - 1).unwrap().frames_encoded.push(Frame { index: 2, message_length: 3.into(), ago: 0.into() });
+        self.history.get_mut(HISTORY_SIZE - 1).unwrap().new_frames_encoded.push(Frame { index: 2, message_length: 3.into(), ago: 1.into() });*/
+        
+        self.history.get_mut(HISTORY_SIZE - 2).unwrap().new_frames_encoding.push(Frame { index: 0, message_length: 5.into(), ago: 1.into() });
+        self.history.get_mut(HISTORY_SIZE - 2).unwrap().frames_encoded.push(Frame { index: 0, message_length: 5.into(), ago: 0.into() });
+        self.history.get_mut(HISTORY_SIZE - 2).unwrap().new_frames_encoded.push(Frame { index: 0, message_length: 5.into(), ago: 1.into() });
+
+        self.history.get_mut(HISTORY_SIZE - 1).unwrap().new_frames_encoding.push(Frame { index: 1, message_length: 5.into(), ago: 1.into() });
+        self.history.get_mut(HISTORY_SIZE - 1).unwrap().frames_encoded.push(Frame { index: 0, message_length: 5.into(), ago: 0.into() });
+        self.history.get_mut(HISTORY_SIZE - 1).unwrap().frames_encoded.push(Frame { index: 1, message_length: 3.into(), ago: 0.into() });
+        self.history.get_mut(HISTORY_SIZE - 1).unwrap().new_frames_encoded.push(Frame { index: 1, message_length: 3.into(), ago: 1.into() }); 
     }
 
     fn get_tree_data(&self) -> TreeData<NM::O, NM::NA> {
@@ -599,7 +620,7 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
                 // Should be 
                 self.move_abr.clone()
             },
-            history: self.get_relevant_history(Some(FEASIBLE_SIZE)),
+            history: self.get_relevant_history(Some(HISTORY_SIZE)),
             belief_bounds: *self.get_latest_belief_bounds(),
             metrics: self.compute_metrics(),
             chosen_move: None,
@@ -612,7 +633,7 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
         self.root = Some(Rc::new(Tree::new(self.get_tree_data())));
         self.current = Rc::downgrade(self.root.as_ref().unwrap());
     }
-
+       
     fn clear_tree(&mut self) {
         self.recording_tree = false;
         self.root = None;
@@ -728,13 +749,13 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
                 break;
             }
         }
-
+        /* 
         // This should be true when speculation size is of even size
-        let minc_minb_sum = self.network_model.compute_min_c_b_sum(&self.abr_obs_to_cca_obs(self.get_relevant_history(Some(FEASIBLE_SIZE))), &None).unwrap();
+        let minc_minb_sum = self.network_model.compute_min_c_b_sum(&self.abr_obs_to_cca_obs(self.get_relevant_history(Some(FEASIBLE_SIZE + 1))), &None).unwrap();
         let mut time_to_c_b = (HISTORY_SIZE + SPECULATION_SIZE + 1) as RealNumInt;
-        let relevant_history = &self.get_relevant_history(Some(FEASIBLE_SIZE + self.history_stack.len()));
-        for ptr in 0..relevant_history.len() - FEASIBLE_SIZE + 1 {
-            let rh = &relevant_history[ptr .. (ptr + FEASIBLE_SIZE)];
+        let relevant_history = &self.get_relevant_history(Some(HISTORY_SIZE + self.history_stack.len()));
+        for ptr in 0..relevant_history.len() - (FEASIBLE_SIZE + 1) + 1 {
+            let rh = &relevant_history[ptr .. (ptr + FEASIBLE_SIZE + 1)];
             let mut rh_copy = vec![];
             for i in rh {
                 rh_copy.push(i.clone());
@@ -743,26 +764,26 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
                 time_to_c_b = (ptr - 1) as RealNumInt;
                 break;
             }
-        }
-
+        } */
+        let relevant_history = &self.get_relevant_history(Some(HISTORY_SIZE + self.history_stack.len()));
         let mut start_history = vec![];
-        for i in &relevant_history[0 .. FEASIBLE_SIZE] {
+        for i in &relevant_history[0 .. FEASIBLE_SIZE + 1] {
             start_history.push(i.clone());
         }
         let start_minc_minb_sum = self.network_model.compute_min_c_b_sum(&self.abr_obs_to_cca_obs(start_history), &None).unwrap();
         let mut time_to_shrink_minc_minb_add = (HISTORY_SIZE + SPECULATION_SIZE + 1) as RealNumInt;
-        for ptr in 0..relevant_history.len() - FEASIBLE_SIZE + 1 {
-            let rh = &relevant_history[ptr .. (ptr + FEASIBLE_SIZE)];
+        for ptr in 0..relevant_history.len() - (FEASIBLE_SIZE + 1) + 1 {
+            let rh = &relevant_history[ptr .. (ptr + FEASIBLE_SIZE + 1)];
             let mut rh_copy = vec![];
             for i in rh {
                 rh_copy.push(i.clone());
             }
             // Account for unsoundness during QE 
-            if self.network_model.compute_min_c_b_sum(&self.abr_obs_to_cca_obs(rh_copy), &None).unwrap() >= start_minc_minb_sum + self.loss_tolerance_abs * 2 - RealNumRep::new_raw(1, 1 << 4){
+            if self.network_model.compute_min_c_b_sum(&self.abr_obs_to_cca_obs(rh_copy), &None).unwrap() >= start_minc_minb_sum + 1 - RealNumRep::new_raw(1, 1 << 4){
                 time_to_shrink_minc_minb_add = (ptr - 1) as RealNumInt;
                 break;
             }
-        }
+        } 
 
         let steps = self.history.len() as RealNumInt + self.history_stack.len() as RealNumInt - 1;
         
@@ -788,14 +809,18 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
             time_to_shrink_c,
             //loss_tol: last.get_ld() <= latest.min_c,
             //loss_tol,
-            loss_tol: (last.get_ld() - first.get_ld()) <= self.loss_tolerance_abs * 2,
+            loss_tol: (last.get_ld() - first.get_ld()) <= self.loss_tolerance_abs * 1,
             time_to_shrink_c_l, 
             time_to_shrink_c_h,
             time_to_c,
-            minc_minb_sum,
-            time_to_c_b,
+            //minc_minb_sum,
+            //time_to_c_b,
+            //time_to_shrink_minc_minb_add,
+            //shrink_minc_minb: minc_minb_sum >= start_minc_minb_sum,
+            minc_minb_sum: 0.into(),
+            time_to_c_b: 0,
             time_to_shrink_minc_minb_add,
-            shrink_minc_minb: minc_minb_sum >= start_minc_minb_sum,
+            shrink_minc_minb: true,
         };
 
         // Metrics for abr
@@ -805,11 +830,12 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
         let mut frame_rate: RealNumInt = 0.into();
         let mut total_qualities: RealNumRep = 0.into();
         // Find the relevant frame first 
+        // TODO: frame can stay in the buffer
         let start_relevant_frame_index = //if first.frames_in_backlog.is_empty() { first.frames_used } else { first.frames_used - 1 };
             first.frames_used;
         let end_relevant_frame_index = if last.frames_encoded.is_empty() { std::cmp::max(last.frames_used - 1, start_relevant_frame_index) } else { last.frames_encoded.last().unwrap().index };
         
-        let abr_relevant_history = &self.get_relevant_history(Some(FEASIBLE_SIZE + self.history_stack.len()));
+        let abr_relevant_history = &self.get_relevant_history(Some(HISTORY_SIZE + self.history_stack.len()));
         for i in start_relevant_frame_index..(end_relevant_frame_index + 1) {
             let mut fetch_time = -1;
             //let mut skip = true;
@@ -991,7 +1017,7 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
             ret.push(self.history.get(i).unwrap().clone());
         }
 
-        let mut copy = std::cmp::min(n_stack, FEASIBLE_SIZE - 1);
+        let mut copy = std::cmp::min(n_stack, FEASIBLE_SIZE);
         copy = std::cmp::max(copy, 0);
         let start = n_stack - copy;
         // ret.extend(self.history_stack[start..].iter().copied());
@@ -1021,12 +1047,12 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
         // feasible moves then pops the oldest observation.
         let network_moves = self
             .network_model
-            .compute_feasible_network_moves(&self.abr_obs_to_cca_obs(self.get_relevant_history(Some(FEASIBLE_SIZE + self.history_stack.len()))), &self.abr_move_to_cca_move());
+            .compute_feasible_network_moves(&self.abr_obs_to_cca_obs(self.get_relevant_history(Some(HISTORY_SIZE + self.history_stack.len()))), &self.abr_move_to_cca_move());
         let network_moves: Vec<<NM as NetworkModel>::NA> = network_moves.into_iter().unique().collect();
 
 
         //ret.into_iter().map(ABRMove::Network).collect() 
-        let encoder_moves = self.compute_feasible_encoder_moves(self.get_relevant_history(Some(FEASIBLE_SIZE)), self.move_abr.clone().unwrap());
+        let encoder_moves = self.compute_feasible_encoder_moves(self.get_relevant_history(Some(HISTORY_SIZE)), self.move_abr.clone().unwrap());
 
         let mut ret: Vec<ABRMove<NM::NA>> = vec![];
         for nm in &network_moves {
@@ -1090,26 +1116,42 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
         self.compute_abr_moves_depth(true)
     }
 
+    fn get_dummy_abr_action(&self) -> Vec<ABRMove<NM::NA>> {
+        // TODO: If there is leftover, needs to change frames_in_backlog
+        let last_backlog = self.get_last_history_item().frames_in_backlog.clone();
+        let last_receiving = self.get_last_history_item().frames_receiving.clone();
+        let mut updated_backlog = vec![];
+        if !last_backlog.is_empty() && !last_receiving.is_empty() {
+            let first = last_backlog.first().unwrap();
+            let last = last_receiving.last().unwrap();
+            if first.index == last.index && last.length >= last.message_length {
+                for i in &last_backlog[1..last_backlog.len()] {
+                    updated_backlog.push(i.clone());
+                }
+            } else {
+                updated_backlog = last_backlog.clone();
+            }
+        }
+        vec![ABRAction {cca_action: CCAAction { rate: 0.into(), }, frames_sent: vec![], frames_in_backlog: updated_backlog,
+            new_frames_encoding: vec![],}].into_iter().map(|r| ABRMove::ABR(r.clone())).collect()
+    }
+
     fn compute_abr_moves_depth(&self, new_encode: bool) -> Vec<ABRMove<NM::NA>>  {
         if new_encode {
             let first_batch: Vec<Vec<ABRMove<NM::NA>>> = self.compute_cca_backlogged_by_abr().iter()
+                .filter(|move_abr| self.get_max_rate_given_latency(*move_abr))
                 .map(|r| self.append_new_encoding_choices(r.clone()))
                 .collect();
             let mut first_batch: Vec<ABRMove<NM::NA>> = first_batch.into_iter().flatten().unique().collect();
             //first_batch
             let second_batch: Vec<Vec<ABRMove<NM::NA>>> = self.compute_abr_spawn_cca().iter()
+                .filter(|move_abr| self.get_max_rate_given_latency(*move_abr))
                 .map(|r| self.append_new_encoding_choices(r.clone()))
                 .collect();
             let mut second_batch: Vec<ABRMove<NM::NA>> = second_batch.into_iter().flatten().unique().collect();
             first_batch.append(&mut second_batch);
             let first_batch: Vec<ABRMove<NM::NA>> = first_batch.into_iter().unique().collect();
-            /* 
-            for i in first_batch.clone() {
-                println!("{:?}!", i);
-            }
-            println!("");
-            println!("");
-            println!(""); */
+            /* Heuristics: Apply the latency check */
             first_batch
         }
         else  {
@@ -1125,8 +1167,41 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
         }
     }
 
+    // Only check the frame at the end does not fail the deadline. Should be an invariant
+    fn get_max_rate_given_latency(&self, move_abr: &ABRAction) -> bool {
+        let last_obs = self.get_last_history_item();
+        let belief_bounds = self.get_latest_belief_bounds();
+        let zero: RealNumRep = 0.into();
+        let mut frames_used = last_obs.frames_used;
+
+        for frame in &move_abr.frames_sent {
+            if *frame.encoded_frames.last().unwrap() >= frames_used {
+                frames_used = frame.index + 1
+            }
+        }
+
+        for frame in &move_abr.frames_in_backlog {
+            if frame.index >= frames_used {
+                frames_used = frame.index + 1
+            }
+        }
+
+        let last_frames_encoded = last_obs.frames_encoded.clone();
+        let mut frames_encoded = vec![];
+        for frame in &last_frames_encoded {
+            if frame.index >= frames_used {
+                frames_encoded.push(frame.clone());
+            }
+        }
+
+        let frames_in_queue = frames_encoded.into_iter().fold(zero, |acc, frame| frame.message_length + acc);
+        // Assume the new added frame is at worst to be min_c
+        (move_abr.cca_action.rate + frames_in_queue + belief_bounds.min_c + belief_bounds.max_q) <= belief_bounds.min_c * (MAX_FRAME_LATENCY - 2)
+    }
+
+
     fn compute_abr_spawn_cca(&self) -> Vec<ABRAction> {
-        let rh = self.get_relevant_history(Some(FEASIBLE_SIZE));
+        let rh = self.get_relevant_history(Some(FEASIBLE_SIZE + 1));
         let max_allowed_rate_no_loss = self.network_model.compute_max_allowed_rate(
             &self.abr_obs_to_cca_obs(rh),
             &self.abr_move_to_cca_move(),
@@ -1232,13 +1307,12 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
 
     }
 
-
     fn compute_cca_backlogged_by_abr(&self) -> Vec<ABRAction> {
         assert!(!self.maximizer()); // only call when its CCA's turn.
         let start = std::time::Instant::now();
         let belief_bounds = self.get_latest_belief_bounds();
 
-        let rh = self.get_relevant_history(Some(FEASIBLE_SIZE));
+        let rh = self.get_relevant_history(Some(FEASIBLE_SIZE + 1));
         //let mc = self.move_abr;
 
         let max_allowed_rate_no_loss = self.network_model.compute_max_allowed_rate(
@@ -1256,12 +1330,12 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
         let ret: Vec<Vec<ABRAction>> = [
             max_allowed_rate_no_loss.unwrap(),
             std::cmp::max(0.into(), min_c - max_q),
+            //min_c + self.loss_tolerance_abs,
             //max_allowed_rate_no_loss.unwrap() + self.loss_tolerance_abs, 
-            max_allowed_rate_no_loss.unwrap() + min_c, 
             // max_allowed_rate2.unwrap(),
             // std::cmp::max(min_c - RealNumRep::from(ALPHA), ALPHA.into()),
             //min_c,
-            //min_c * 2,
+            min_c * 3,
             //min_c + ALPHA,
             // belief_bounds.max_c,
             // min_c / 2,
@@ -1354,7 +1428,7 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
     }
 
     fn get_last_encoding_choice(&self) -> RealNumInt {
-        let mut rev_history = self.get_relevant_history(Some(SPECULATION_SIZE));
+        let mut rev_history = self.get_relevant_history(Some(HISTORY_SIZE));
         rev_history.reverse();
         for h in &rev_history {
             if !h.frames_encoding.is_empty() {
@@ -1368,7 +1442,7 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
     }
     
     fn get_last_sending_choice(&self) -> Option<FragmentedFrame> {
-        let mut rev_history = self.get_relevant_history(Some(SPECULATION_SIZE));
+        let mut rev_history = self.get_relevant_history(Some(HISTORY_SIZE));
         rev_history.reverse();
         for h in &rev_history {
             //if !h.frames_in_backlog.is_empty() {
@@ -1394,10 +1468,11 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
         assert!(min_c >= self.loss_tolerance_abs);
         let new_frames_encoding_choices = [
             //[min_c - self.loss_tolerance_abs],
-            //vec![(latest_index + 1, vec![min_c - self.loss_tolerance_abs])],
             //vec![(latest_index + 1, vec![min_c / 4]), (latest_index + 2, vec![min_c / 4]),],
             //vec![(latest_index + 1, vec![min_c / 2]), (latest_index + 2, vec![min_c / 2]),],
             //vec![(latest_index + 1, vec![min_c * 3 / 2]), (latest_index + 2, vec![min_c * 3 / 2]),],
+            //vec![(latest_index + 1, vec![min_c - self.loss_tolerance_abs])],
+            //vec![(latest_index + 1, vec![min_c / 2])],
             vec![(latest_index + 1, vec![min_c])],
             //vec![(latest_index + 1, vec![min_c + self.loss_tolerance_abs])],
             //min_c - self.loss_tolerance_abs * 2,
@@ -1413,8 +1488,8 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
             ret.push(ABRMove::ABR(ABRAction {new_frames_encoding,
                 .. abr_move.clone()}));
         }
-        ret.push(ABRMove::ABR(ABRAction {new_frames_encoding: vec![], 
-            .. abr_move.clone()}));
+        //ret.push(ABRMove::ABR(ABRAction {new_frames_encoding: vec![], 
+        //    .. abr_move.clone()}));
         ret
     }
 
@@ -1808,13 +1883,13 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
 
     fn compute_belief_bounds(&self) -> BeliefBounds {
         self.network_model
-            .compute_belief_bounds(&self.abr_obs_to_cca_obs(self.get_relevant_history(Some(FEASIBLE_SIZE))), &self.abr_move_to_cca_move())
+            .compute_belief_bounds(&self.abr_obs_to_cca_obs(self.get_relevant_history(Some(FEASIBLE_SIZE + 1))), &self.abr_move_to_cca_move())
     }
 
     fn get_network_move_sim(&self, args: &Args) -> Option<ABRMove<NM::NA>> {
         let nm = self.network_model
-            .get_network_move_sim(&self.abr_obs_to_cca_obs(self.get_relevant_history(None)), &self.abr_move_to_cca_move(), args.sim_ideal);
-        let em = self.get_encoder_move_sim(self.get_relevant_history(None), self.move_abr.clone().unwrap());
+            .get_network_move_sim(&self.abr_obs_to_cca_obs(self.get_relevant_history(Some(FEASIBLE_SIZE))), &self.abr_move_to_cca_move(), args.sim_ideal);
+        let em = self.get_encoder_move_sim(self.get_relevant_history(Some(FEASIBLE_SIZE)), self.move_abr.clone().unwrap());
         Some(ABRMove::Network(em, nm.unwrap()))
     }
 
@@ -1833,7 +1908,7 @@ impl<NM: NetworkModel> AdaptiveBitrateState<NM> {
             if frame.ago == 1 {
                 let mut fresh_frame = frame;
                 fresh_frame.ago = 0;
-                fresh_frame.message_length = fresh_frame.message_length; //* ENCODING_MIN_FACTOR;
+                fresh_frame.message_length = fresh_frame.message_length - self.loss_tolerance_abs; //* ENCODING_MIN_FACTOR;
                 sim_new_frame_encoded.push(fresh_frame);
             }
         }
@@ -1960,7 +2035,7 @@ impl SimStrategy<'_> {
     // TODO: change to ideal trace later 
     fn get_rate<NM: NetworkModel>(&mut self, ccs: &AdaptiveBitrateState<NM>) -> Option<ABRMove<NM::NA>> {
         let bb = ccs.get_latest_belief_bounds();
-        let history = ccs.get_relevant_history(Some(SPECULATION_SIZE));
+        let history = ccs.get_relevant_history(Some(HISTORY_SIZE));
         let last_history = history.last().unwrap();
         let move_abr = ccs.move_abr.clone();
         let n = history.len();
