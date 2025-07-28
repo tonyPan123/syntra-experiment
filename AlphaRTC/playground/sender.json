@@ -1,0 +1,45 @@
+{
+    "serverless_connection": {
+        "autoclose": 600,
+        "sender": {
+            "enabled": true,
+            "dest_ip": "10.0.0.1",
+            "dest_port": 8003
+        },
+        "receiver": {
+            "enabled": false
+        }
+    },
+    "bwe_feedback_duration": 200,
+    "video_source": {
+        "video_disabled": {
+            "enabled": false
+        },
+        "webcam": {
+            "enabled": false
+        },
+        "video_file": {
+            "enabled": true,
+            "height": 720,
+            "width": 1280,
+            "fps": 30,
+            "file_path": "testmedia/test-barcode.y4m"
+        }
+    },
+    "audio_source": {
+        "microphone": {
+            "enabled": false
+        },
+        "audio_file": {
+	      "enabled": true,
+          "file_path": "testmedia/test.wav"
+        }
+    },
+    "save_to_file": {
+        "enabled": false
+    },
+    "logging": {
+        "enabled": false,
+        "log_output_path": "sender.log"
+    }
+}
