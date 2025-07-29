@@ -132,10 +132,10 @@ class CongCtrl
         vector<Time> buffered_rtt;
 
         int counter;
-
+        int probe_period;
 
     public:
-        CongCtrl() : 
+        CongCtrl(int probe_period = 20) : 
             history(HISTORY_SIZE),
             beliefs(BeliefBound()), 
             cum_segs_sent(0),  
@@ -146,7 +146,8 @@ class CongCtrl
             no_loss_rate(0), 
             buffered_ack({}),
             buffered_rtt({}), 
-            counter(0)
+            counter(0), 
+            probe_period(probe_period)
             {
                 for (int i = 0; i < (HISTORY_SIZE); i++) {
                     Loss loss = {0, 0};
@@ -236,7 +237,7 @@ class CongCtrl
             if (bb.max_c < MAX_BANDWIDTH) {
                 // Converging should happen at least for 1s
                 beliefs.max_c = bb.max_c / scaling;
-                counter = 200;
+                counter = probe_period;
             }
             if (counter == 0) {
                 beliefs.max_c = bb.max_c / scaling;
