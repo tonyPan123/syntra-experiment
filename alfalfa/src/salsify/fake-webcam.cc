@@ -103,7 +103,7 @@ int main( int argc, char *argv[] )
     abort();
   }
 
-  if ( argc != 4 ) {
+  if ( argc != 5 ) {
     usage( argv[ 0 ] );
     return EXIT_FAILURE;
   }
@@ -129,7 +129,7 @@ int main( int argc, char *argv[] )
     /* construct Socket for outgoing datagrams */
   UDPSocket socket;
   //socket.connect( Address( "100.64.0.1", "8889" ) );
-  socket.connect( Address( argv[ 2 ], "8889" ) );
+  socket.connect( Address( argv[ 2 ], argv[3] ) );
   //socket.connect( Address( "0", "8889" ) );
   socket.set_timestamps();
 
@@ -188,7 +188,7 @@ int main( int argc, char *argv[] )
   //[[maybe_unused]] std::vector<uint8_t> output = encoder.encode_with_target_size( raster.get(), 7000 );
   //cout << output.size() << endl;
 
-  CongCtrl cc {atoi(argv[ 3 ])}; 
+  CongCtrl cc {atoi(argv[ 4 ])}; 
   ABR abr {connection_id, encoder};
 
   [[maybe_unused]] auto start = chrono::system_clock::now();
