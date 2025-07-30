@@ -76,16 +76,21 @@ mutex mtx;
 condition_variable cv;
 
 
-//int main( int argc, char *argv[] )
-int main()
+int main( int argc, char *argv[] )
+//int main()
 {
   /* choose a random connection_id */
   const uint16_t connection_id = 1337; // ezrand();
   cerr << "Connection ID: " << connection_id << endl;
 
+  if ( argc != 2 ) {
+    usage( argv[ 0 ] );
+    return EXIT_FAILURE;
+  }
+  
   /* construct Socket for incoming  datagrams */
   UDPSocket socket;
-  socket.bind( Address( "0", "8889" ) );
+  socket.bind( Address( "0", argv[1] ) );
   socket.set_timestamps();
 
   /* frame no => FragmentedFrame; used when receiving packets out of order */

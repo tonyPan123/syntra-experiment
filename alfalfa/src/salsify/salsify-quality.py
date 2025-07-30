@@ -7,22 +7,22 @@ import matplotlib.pyplot as plt
 import re 
 import math 
 
+def partition_array(arr, n):
+    return [arr[i:i + n] for i in range(0, len(arr), n)]
+
 def main(args):
     ssims = []
     with open(args.s, 'r') as ssim_log:
         for line in ssim_log:
-            match = re.search(r'SSIM of ([\d.]+) is ([\d.]+)$', line)
+            match = re.search(r"ssim=([0-9.]+)", line)
             if match: 
-                last_number = float(match.group(2))
+                last_number = float(match.group(1))
                 ssims.append(last_number)
-
 
     ssims = [-10 * math.log10(1 - ssim)for ssim in ssims]
 
     print('Median per-frame quality (ssim):', np.median(ssims))
     print('P25 per-frame quality (ssim):', np.percentile(ssims, 25))
-
-
 
 
 if __name__ == '__main__':
