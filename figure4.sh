@@ -20,13 +20,13 @@ sleep 5
 
 echo "Experiment for Salsify----------------------------"
 echo "LTE_ATT--------"
-./salsify-experiment.sh ~/benchmark.y4m $port1 /usr/share/mahimahi/traces/ATT-LTE-driving.up /usr/share/mahimahi/traces/ATT-LTE-driving.down 
+./salsify-experiment.sh ~/benchmark.y4m $port1 /usr/share/mahimahi/traces/ATT-LTE-driving.up /usr/share/mahimahi/traces/ATT-LTE-driving.down trace
 sleep 5
 echo "TMobile-UMTS--------"
-./salsify-experiment.sh ~/benchmark.y4m $port2 /usr/share/mahimahi/traces/TMobile-UMTS-driving.up /usr/share/mahimahi/traces/TMobile-UMTS-driving.down 
+./salsify-experiment.sh ~/benchmark.y4m $port2 /usr/share/mahimahi/traces/TMobile-UMTS-driving.up /usr/share/mahimahi/traces/TMobile-UMTS-driving.down trace
 sleep 5
 echo "Verizon-LTE--------"
-./salsify-experiment.sh ~/benchmark.y4m $port3 /usr/share/mahimahi/traces/Verizon-LTE-driving.up /usr/share/mahimahi/traces/Verizon-LTE-driving.down
+./salsify-experiment.sh ~/benchmark.y4m $port3 /usr/share/mahimahi/traces/Verizon-LTE-driving.up /usr/share/mahimahi/traces/Verizon-LTE-driving.down trace
 sleep 5
 popd
 

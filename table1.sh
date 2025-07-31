@@ -16,8 +16,21 @@ echo "Varying_Link--------"
 ./syntra-experiment.sh ~/benchmark.y4m $port2 ../../../traces/varying-link ../../../traces/varying-link varying
 sleep 5
 echo "ACK_Aggregation--------"
-./syntra-experiment.sh ~/benchmark.y4m $port3 ../../../traces/fixed-link ../../../traces/real-jitter jitter
+./syntra-experiment.sh ~/benchmark.y4m $port3 ../../../traces/real-jitter ../../../traces/fixed-link jitter
 sleep 5
 echo "Shallow_Buffer--------"
 ./syntra-experiment.sh ~/benchmark.y4m $port4 ../../../traces/fixed-link ../../../traces/fixed-link shallow
+
+echo "Experiment for Salsify----------------------------"
+echo "Fixed_Link--------"
+./salsify-experiment.sh ~/benchmark.y4m $port1 ../../../traces/fixed-link ../../../traces/fixed-link fixed
+sleep 5
+echo "Varying_Link--------"
+./salsify-experiment.sh ~/benchmark.y4m $port2 ../../../traces/varying-link ../../../traces/varying-link varying
+sleep 5
+echo "ACK_Aggregation--------"
+./salsify-experiment.sh ~/benchmark.y4m $port3 ../../../traces/real-jitter ../../../traces/fixed-link jitter
+sleep 5
+echo "Shallow_Buffer--------"
+./salsify-experiment.sh ~/benchmark.y4m $port4 ../../../traces/fixed-link ../../../traces/real-jitter shallow
 popd

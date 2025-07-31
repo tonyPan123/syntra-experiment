@@ -4,7 +4,7 @@ set -e
 timeout 3m ./receiver $2 > receiver.log 2>&1 &
 if [ "$5" = "shallow" ]; then
     echo "Shallow Buffer Experiment"
-    timeout 3m mm-delay 25 mm-link $3 $4  -- bash -c "./fake-webcam $1 \$MAHIMAHI_BASE $2 200 > sender.log 2>&1 " --uplink-queue=droptail --uplink-queue-args="bytes=10500" &
+    timeout 3m mm-delay 25 mm-link $3 $4  --uplink-queue=droptail --uplink-queue-args="bytes=10500" -- bash -c "./fake-webcam $1 \$MAHIMAHI_BASE $2 200 > sender.log 2>&1 "  &
 else
     if [ "$5" = "jitter" ]; then
         timeout 3m mm-delay 25 mm-link $3 $4  -- bash -c "./fake-webcam $1 \$MAHIMAHI_BASE $2 20 > sender.log 2>&1 " &
