@@ -23,7 +23,7 @@ def main(args):
             if match: 
                 timestamp = int(match.group(1))
 
-    print('Frame rate:', 30 * np.clip(frame_number / timestamp / 1.5, 0, 1))
+    print('Frame rate:', np.ceil(30 * np.clip(frame_number / timestamp / 1.5, 0, 1)))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
