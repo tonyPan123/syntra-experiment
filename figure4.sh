@@ -9,13 +9,13 @@ port3=$((base + 3))
 pushd alfalfa/src/salsify
 echo "Experiment for Syntra----------------------------"
 echo "LTE_ATT--------"
-#./syntra-trace-experiment.sh ~/benchmark.y4m $port1 /usr/share/mahimahi/traces/ATT-LTE-driving.up /usr/share/mahimahi/traces/ATT-LTE-driving.down 
+./syntra-trace-experiment.sh ~/benchmark.y4m $port1 /usr/share/mahimahi/traces/ATT-LTE-driving.up /usr/share/mahimahi/traces/ATT-LTE-driving.down 
 sleep 5
 echo "TMobile-UMTS--------"
-#./syntra-trace-experiment.sh ~/benchmark.y4m $port2 /usr/share/mahimahi/traces/TMobile-UMTS-driving.up /usr/share/mahimahi/traces/TMobile-UMTS-driving.down 
+./syntra-trace-experiment.sh ~/benchmark.y4m $port2 /usr/share/mahimahi/traces/TMobile-UMTS-driving.up /usr/share/mahimahi/traces/TMobile-UMTS-driving.down 
 sleep 5
 echo "Verizon-LTE--------"
-#./syntra-trace-experiment.sh ~/benchmark.y4m $port3 /usr/share/mahimahi/traces/Verizon-LTE-driving.up /usr/share/mahimahi/traces/Verizon-LTE-driving.down
+./syntra-trace-experiment.sh ~/benchmark.y4m $port3 /usr/share/mahimahi/traces/Verizon-LTE-driving.up /usr/share/mahimahi/traces/Verizon-LTE-driving.down
 sleep 5
 
 echo "Experiment for Salsify----------------------------"
@@ -29,3 +29,7 @@ echo "Verizon-LTE--------"
 ./salsify-experiment.sh ~/benchmark.y4m $port3 /usr/share/mahimahi/traces/Verizon-LTE-driving.up /usr/share/mahimahi/traces/Verizon-LTE-driving.down
 sleep 5
 popd
+
+echo "Experiment for WebRTC-gcc----------------------------"
+
+echo "Experiment for WebRTC-Vegas----------------------------"
