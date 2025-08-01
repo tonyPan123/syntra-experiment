@@ -79,4 +79,37 @@ pip install -U yt-dlp
 yt-dlp -f "bestvideo[height=720][ext=mp4]" "https://www.youtube.com/watch?v=hkmnhcsvueE"
 ffmpeg -i WATCH：\ White\ House\ Press\ Secretary\ Kayleigh\ McEnany\ briefs\ reporters\ \[hkmnhcsvueE\].mp4 -pix_fmt yuv420p benchmark.y4m
 ```
+Make the barcode video for gcc and vegas baselines (to calculate ssim score)
+```
+pip3 install python-barcode
+ffmpeg -i benchmark.y4m -frames:v 18000 trimmed.y4m
+ffmpeg -i trimmed.y4m -qscale:v 2 frames/frame_%05d.png
+python3 make_barcode.py
+ffmpeg -i frames/frame_%05d.png -i barcodes/barcode_%05d.png -filter_complex "[0][1]overlay=10:10" outputs/out_%05d.png
+ffmpeg -framerate 30 -i output_frames/out_%05d.png -pix_fmt yuv420p benchmark-barcode.y4m
+```
+webrtc scripts
+```
+sudo apt install zbar-tools
+
+pip3 install matplotlib
+pip3 install python-barcode
+pip3 install opencv-python
+pip3 install pyzbar
+pip3 install scikit-image
+```
+
+```
+gclient sync // This may fail once
+mv src/* .
+gn gen out/Default
+ninja -C out/Default peerconnection_serverless
+```
+```
+ln -s ~/benchmark-barcode.y4m testmedia/benchmark-barcode.y4m
+cp ../out/Default/peerconnection_serverless .
+cp ../out/Default/peerconnection_gcc .
+```
+
+
 
