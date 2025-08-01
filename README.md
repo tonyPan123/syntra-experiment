@@ -1,15 +1,45 @@
-# syntra-experiment
+# Syntra 
 
+# 0. Install and configure dependencies
+## System dependencies
 ```
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-export PATH=$PATH:~/.cargo/bin
+sudo apt-get install python3 python3-pip
+sudo apt-get install yasm libxinerama-dev libxcursor-dev libglu1-mesa-dev libboost-all-dev libx264-dev libxrandr-dev libxi-dev libglew-dev libglfw3-dev
+sudo apt-get install zbar-tools
 ```
-
+## Python dependencies 
 ```
 pip3 install z3-solver
 pip3 install numpy
 pip3 install pandas
+pip3 install python-barcode
+pip3 install matplotlib
+pip3 install python-barcode
+pip3 install opencv-python
+pip3 install pyzbar
+pip3 install scikit-image
+pip3 install -U yt-dlp
 ```
+## Extra dependencies
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+export PATH=$PATH:~/.cargo/bin
+
+git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+export PATH=/path/to/depot_tools:$PATH # modify this path to where you want the dependencies installed
+
+cd syn-experiment/gf-complete
+./autogen.sh
+./configure
+make
+sudo make install
+```
+
+
+
+
+
+
 
 ```
 python3 -m qe.netcal.qe_queries -t 6
@@ -18,19 +48,8 @@ Build rust dependency,
 ```
 cargo build --release
 ```
-Build gf-complete
-```
-./autogen.sh
-./configure
-make
-sudo make install
-```
 
-Then you can build syntra and salsify, you need to have such dependencies first: 
-```
-sudo apt-get install yasm libxinerama-dev libxcursor-dev libglu1-mesa-dev libboost-all-dev libx264-dev libxrandr-dev libxi-dev libglew-dev libglfw3-dev
 
-```
 Then, 
 ```
 mkdir src/rust-deps
@@ -75,13 +94,11 @@ ninja -C out/Default peerconnection_gcc
 ```
 Fetch the benchmark video and convert it into yuv420p format:
 ```
-pip install -U yt-dlp
 yt-dlp -f "bestvideo[height=720][ext=mp4]" "https://www.youtube.com/watch?v=hkmnhcsvueE"
 ffmpeg -i WATCH：\ White\ House\ Press\ Secretary\ Kayleigh\ McEnany\ briefs\ reporters\ \[hkmnhcsvueE\].mp4 -pix_fmt yuv420p benchmark.y4m
 ```
 Make the barcode video for gcc and vegas baselines (to calculate ssim score)
 ```
-pip3 install python-barcode
 ffmpeg -i benchmark.y4m -frames:v 18000 trimmed.y4m
 ffmpeg -i trimmed.y4m -qscale:v 2 frames/frame_%05d.png
 python3 make_barcode.py
@@ -89,15 +106,7 @@ ffmpeg -i frames/frame_%05d.png -i barcodes/barcode_%05d.png -filter_complex "[0
 ffmpeg -framerate 30 -i output_frames/out_%05d.png -pix_fmt yuv420p benchmark-barcode.y4m
 ```
 webrtc scripts
-```
-sudo apt install zbar-tools
 
-pip3 install matplotlib
-pip3 install python-barcode
-pip3 install opencv-python
-pip3 install pyzbar
-pip3 install scikit-image
-```
 
 ```
 gclient sync // This may fail once
