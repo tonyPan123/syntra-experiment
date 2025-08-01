@@ -9,6 +9,7 @@ sudo apt-get install pkg-config autoconf-archive
 sudo apt-get install libjpeg-dev
 sudo apt-get install yasm libxinerama-dev libxcursor-dev libglu1-mesa-dev libboost-all-dev libx264-dev libxrandr-dev libxi-dev libglew-dev libglfw3-dev
 sudo apt-get install zbar-tools
+sudo apt-get install ffmpeg
 ```
 ## Python dependencies 
 ```
