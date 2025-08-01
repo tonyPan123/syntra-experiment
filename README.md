@@ -28,15 +28,17 @@ export PATH=$PATH:~/.cargo/bin
 
 git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 export PATH=/path/to/depot_tools:$PATH # modify this path to where you want the dependencies installed
-
+```
+## Build
+There are dependecies between the projects so you should do the following in order!!!
+### GF-complete
+```
 cd syn-experiment/gf-complete
 ./autogen.sh
 ./configure
 make
 sudo make install
 ```
-## Build
-There are dependecies between the projects so you should do the following in order!!!
 ### QE Module
 ```
 cd qe
