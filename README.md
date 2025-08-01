@@ -55,7 +55,7 @@ cargo build --release
 
 ### Syntra & Salsify
 ```
-cd alfafa
+cd alfalfa
 mkdir src/rust-deps
 cp ../minimax/target/release/libnetwork_model_lib.a src/rust-deps/
 ./autogen.sh
@@ -107,21 +107,8 @@ cp out/Default/peerconnection_serverless playground/
 ## Set up
 ### Workload preparation
 ```
-// Suppose you are in syntra-experiment directory 
 yt-dlp -f "bestvideo[height=720][ext=mp4]" "https://www.youtube.com/watch?v=hkmnhcsvueE"
-ffmpeg -i WATCH：\ White\ House\ Press\ Secretary\ Kayleigh\ McEnany\ briefs\ reporters\ \[hkmnhcsvueE\].mp4 -pix_fmt yuv420p benchmark.y4m
-
-ffmpeg -i benchmark.y4m -frames:v 18000 trimmed.y4m
-mkdir frames
-ffmpeg -i trimmed.y4m -qscale:v 2 frames/frame_%05d.png
-mkdir barcodes
-python3 make_barcode.py
-mkdir outputs
-ffmpeg -i frames/frame_%05d.png -i barcodes/barcode_%05d.png -filter_complex "[0][1]overlay=10:10" outputs/out_%05d.png
-ffmpeg -framerate 30 -i outputs/out_%05d.png -pix_fmt yuv420p benchmark-barcode.y4m
-
-ln -s ./benchmark-barcode.y4m gcc/playground/testmedia/benchmark-barcode.y4m
-ln -s ./benchmark-barcode.y4m vegas/playground/testmedia/benchmark-barcode.y4m
+sudo ./fetch_workload.sh /path/to/syntra /path/to/filesystem /directory/contains/the/video
 ```
 ## Run
 ### Figure 4
