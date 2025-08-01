@@ -88,7 +88,7 @@ gclient sync // This will fail
 gclient sync // Just run this command twice
 mv src/* .
 gn gen out/Default
-ninja -C out/Default peerconnection_gcc
+third_party/depot_tools/ninja -C out/Default peerconnection_gcc
 cp out/Default/peerconnection_gcc playground/
 ```
 ### WebRTC-vegas
@@ -98,7 +98,7 @@ gclient sync // This will fail
 gclient sync // Just run this command twice
 mv src/* .
 gn gen out/Default
-ninja -C out/Default peerconnection_serverless
+third_party/depot_tools/ninja -C out/Default peerconnection_serverless
 cp out/Default/peerconnection_serverless playground/
 ```
 
