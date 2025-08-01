@@ -34,32 +34,29 @@ cd syn-experiment/gf-complete
 make
 sudo make install
 ```
-
-
-
-
-
-
-
+## Build
+There are dependecies between the projects so you should do the following in order!!!
+### QE Module
 ```
+cd qe
 python3 -m qe.netcal.qe_queries -t 6
 ```
-Build rust dependency, 
+### Belief-bound runtime
 ```
+cd minimax
 cargo build --release
 ```
 
-
-Then, 
+### Syntra & Salsify
 ```
+cd alfafa
 mkdir src/rust-deps
 cp ../minimax/target/release/libnetwork_model_lib.a src/rust-deps/
-```
-```
 ./autogen.sh
 ./configure
-
+make
 ```
+#### Warning
 
 If you got error like 
 ```
@@ -79,46 +76,50 @@ You need to delete
 ```
 BASE_LDADD = ../input/libalfalfainput.a ../decoder/libalfalfadecoder.a ../util/libalfalfautil.a /usr/lib/x86_64-linux-gnu/libx264.a $(X264_LIBS)
 ```
-WebRTC-gcc baseline:
-Install Depot tools first
+### WebRTC-gcc
 ```
-git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-export PATH=/path/to/depot_tools:$PATH
-```
-In AlphaRTC
-```
-gclient sync // This may fail once
+cd gcc
+gclient sync // This will fail
+gclient sync // Just run this command twice
 mv src/* .
 gn gen out/Default
 ninja -C out/Default peerconnection_gcc
+cp out/Default/peerconnection_gcc playground/
 ```
-Fetch the benchmark video and convert it into yuv420p format:
+### WebRTC-vegas
 ```
+cd vegas
+gclient sync // This will fail
+gclient sync // Just run this command twice
+mv src/* .
+gn gen out/Default
+ninja -C out/Default peerconnection_serverless
+cp out/Default/peerconnection_serverless playground/
+```
+
+# Experiments
+## Set up
+### Workload preparation
+```
+// Suppose you are in syntra-experiment directory 
 yt-dlp -f "bestvideo[height=720][ext=mp4]" "https://www.youtube.com/watch?v=hkmnhcsvueE"
 ffmpeg -i WATCH：\ White\ House\ Press\ Secretary\ Kayleigh\ McEnany\ briefs\ reporters\ \[hkmnhcsvueE\].mp4 -pix_fmt yuv420p benchmark.y4m
-```
-Make the barcode video for gcc and vegas baselines (to calculate ssim score)
-```
+
 ffmpeg -i benchmark.y4m -frames:v 18000 trimmed.y4m
 ffmpeg -i trimmed.y4m -qscale:v 2 frames/frame_%05d.png
 python3 make_barcode.py
 ffmpeg -i frames/frame_%05d.png -i barcodes/barcode_%05d.png -filter_complex "[0][1]overlay=10:10" outputs/out_%05d.png
 ffmpeg -framerate 30 -i output_frames/out_%05d.png -pix_fmt yuv420p benchmark-barcode.y4m
-```
-webrtc scripts
 
-
+ln -s ./benchmark-barcode.y4m gcc/playground/testmedia/benchmark-barcode.y4m
+ln -s ./benchmark-barcode.y4m vegas/playground/testmedia/benchmark-barcode.y4m
 ```
-gclient sync // This may fail once
-mv src/* .
-gn gen out/Default
-ninja -C out/Default peerconnection_serverless
+## Run
+### Figure 4
 ```
+./figure_4.sh
 ```
-ln -s ~/benchmark-barcode.y4m testmedia/benchmark-barcode.y4m
-cp ../out/Default/peerconnection_serverless .
-cp ../out/Default/peerconnection_gcc .
+### Table 1
 ```
-
-
-
+./table_1.sh
+```
