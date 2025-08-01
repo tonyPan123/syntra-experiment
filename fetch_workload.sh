@@ -2,7 +2,7 @@
 set -e
 
 pushd $2
-ffmpeg -i $3/WATCH：\ White\ House\ Press\ Secretary\ Kayleigh\ McEnany\ briefs\ reporters\ \[hkmnhcsvueE\].mp4 -pix_fmt yuv420p -frames:v 18000 benchmark.y4m
+#ffmpeg -i $3/WATCH：\ White\ House\ Press\ Secretary\ Kayleigh\ McEnany\ briefs\ reporters\ \[hkmnhcsvueE\].mp4 -pix_fmt yuv420p -frames:v 18000 benchmark.y4m
 mkdir frames
 ffmpeg -i benchmark.y4m -qscale:v 2 frames/frame_%05d.png
 mkdir barcodes

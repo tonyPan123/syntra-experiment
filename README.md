@@ -5,11 +5,22 @@
 ```
 sudo apt update
 sudo apt-get install python3 python3-pip
+// Syntra & Salsify
 sudo apt-get install pkg-config autoconf-archive
 sudo apt-get install libjpeg-dev
 sudo apt-get install yasm libxinerama-dev libxcursor-dev libglu1-mesa-dev libboost-all-dev libx264-dev libxrandr-dev libxi-dev libglew-dev libglfw3-dev
+// Python scripts
 sudo apt-get install zbar-tools
+// FFmpeg
 sudo apt-get install ffmpeg
+// Mahimahi
+sudo apt-get install apache2
+sudo apt-get install apache2-dev
+sudo apt-get install dnsmasq
+sudo apt-get install protobuf-compiler
+sudo apt-get install libssl-dev
+sudo apt-get install libxcb-present-dev
+sudo apt install libpango1.0-dev
 ```
 ## Python dependencies 
 ```
@@ -42,7 +53,7 @@ cd gf-complete
 make
 sudo make install
 ```
-### QE Module
+### QE module
 ```
 cd qe
 python3 -m qe.netcal.qe_queries -t 6
@@ -102,13 +113,23 @@ gn gen out/Default
 third_party/depot_tools/ninja -C out/Default peerconnection_serverless
 cp out/Default/peerconnection_serverless playground/
 ```
+### Mahimahi
+```
+git clone https://github.com/ravinet/mahimahi
+cd mahimahi
+./autogen.sh
+./configure
+make
+sudo make install
+```
 
 # Experiments
 ## Set up
 ### Workload preparation
 ```
 yt-dlp -f "bestvideo[height=720][ext=mp4]" "https://www.youtube.com/watch?v=hkmnhcsvueE"
-sudo ./fetch_workload.sh /path/to/syntra /path/to/filesystem /directory/contains/the/video
+sudo ffmpeg -i /path/to/video -pix_fmt yuv420p -frames:v 18000 /path/to/filesystem/benchmark.y4m
+sudo ./fetch_workload.sh /path/to/syntra /path/to/filesystem 
 ```
 ## Run
 ### Figure 4
