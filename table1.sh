@@ -10,27 +10,41 @@ port4=$((base + 4))
 echo "Experiment for Syntra----------------------------"
 pushd alfalfa/src/salsify
 echo "Fixed_Link--------"
-./syntra-experiment.sh ~/benchmark.y4m $port1 ../../../traces/fixed-link ../../../traces/fixed-link fixed
+./syntra-experiment.sh $1 $port1 ../../../traces/fixed-link ../../../traces/fixed-link fixed
 sleep 5
 echo "Varying_Link--------"
-./syntra-experiment.sh ~/benchmark.y4m $port2 ../../../traces/varying-link ../../../traces/varying-link varying
+./syntra-experiment.sh $1 $port2 ../../../traces/varying-link ../../../traces/varying-link varying
 sleep 5
 echo "ACK_Aggregation--------"
-./syntra-experiment.sh ~/benchmark.y4m $port3 ../../../traces/real-jitter ../../../traces/fixed-link jitter
+./syntra-experiment.sh $1 $port3 ../../../traces/real-jitter ../../../traces/fixed-link jitter
 sleep 5
 echo "Shallow_Buffer--------"
-./syntra-experiment.sh ~/benchmark.y4m $port4 ../../../traces/fixed-link ../../../traces/fixed-link shallow
+./syntra-experiment.sh $1 $port4 ../../../traces/fixed-link ../../../traces/fixed-link shallow
 
 echo "Experiment for Salsify----------------------------"
 echo "Fixed_Link--------"
-./salsify-experiment.sh ~/benchmark.y4m $port1 ../../../traces/fixed-link ../../../traces/fixed-link fixed
+./salsify-experiment.sh $1 $port1 ../../../traces/fixed-link ../../../traces/fixed-link fixed
 sleep 5
 echo "Varying_Link--------"
-./salsify-experiment.sh ~/benchmark.y4m $port2 ../../../traces/varying-link ../../../traces/varying-link varying
+./salsify-experiment.sh $1 $port2 ../../../traces/varying-link ../../../traces/varying-link varying
 sleep 5
 echo "ACK_Aggregation--------"
-./salsify-experiment.sh ~/benchmark.y4m $port3 ../../../traces/real-jitter ../../../traces/fixed-link jitter
+./salsify-experiment.sh $1 $port3 ../../../traces/real-jitter ../../../traces/fixed-link jitter
 sleep 5
 echo "Shallow_Buffer--------"
-./salsify-experiment.sh ~/benchmark.y4m $port4 ../../../traces/fixed-link ../../../traces/real-jitter shallow
+./salsify-experiment.sh $1 $port4 ../../../traces/fixed-link ../../../traces/real-jitter shallow
+popd
+
+pushd gcc/playground
+echo "Fixed_Link--------"
+./gcc-experiment.sh $port1 ../../../traces/fixed-link ../../../traces/fixed-link fixed
+sleep 5
+echo "Varying_Link--------"
+./gcc-experiment.sh $port2 ../../../traces/varying-link ../../../traces/varying-link varying
+sleep 5
+echo "ACK_Aggregation--------"
+./gcc-experiment.sh $port3 ../../../traces/real-jitter ../../../traces/fixed-link jitter
+sleep 5
+echo "Shallow_Buffer--------"
+./gcc-experiment.sh $port4 ../../../traces/fixed-link ../../../traces/real-jitter shallow
 popd

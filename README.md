@@ -126,9 +126,9 @@ ln -s ./benchmark-barcode.y4m vegas/playground/testmedia/benchmark-barcode.y4m
 ## Run
 ### Figure 4
 ```
-./figure_4.sh
+./figure4.sh benchmark.y4m
 ```
 ### Table 1
 ```
-./table_1.sh
+./table1.sh benchmark.y4m
 ```
