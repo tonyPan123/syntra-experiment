@@ -3,6 +3,7 @@
 # 0. Install and configure dependencies
 ## System dependencies
 ```
+sudo apt update
 sudo apt-get install python3 python3-pip
 sudo apt-get install yasm libxinerama-dev libxcursor-dev libglu1-mesa-dev libboost-all-dev libx264-dev libxrandr-dev libxi-dev libglew-dev libglfw3-dev
 sudo apt-get install zbar-tools
