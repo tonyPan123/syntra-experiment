@@ -47,7 +47,7 @@ def compare_frames_by_barcode(frames1, frames2):
     ssim_scores = []
     for idx, frame in enumerate(frames2):
         barcode = get_frame_barcode(frame)
-        if barcode:
+        if barcode and int(barcode) < len(frames1):
             score = calculate_ssim(frames1[int(barcode)], frame)
         else:
             score = calculate_ssim(frames1[idx], frame)
