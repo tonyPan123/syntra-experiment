@@ -143,21 +143,23 @@ Because the workload is really big (need ~200GB) so you can uncompress the video
 ```
 sudo ffmpeg -i /path/to/video -pix_fmt yuv420p -frames:v 18000 /path/to/filesystem/benchmark.y4m
 ```
-Finally you need to run `fetch_workload.sh` in `syntra-experiment` to add barcodes to the video and finish the set up of the workload: 
+Finally you need to run `fetch_workload.sh` in `syntra-experiment` to add barcodes to the video and finish the set up of the workload (it will also add some soft links from your backup filesystem to `syntra-experiment`): 
 ```
 sudo ./fetch_workload.sh /path/to/syntra /path/to/filesystem 
 ```
 ## Run
-### Figure 4
+### Figure 4 (~15 hours)
 For reproduction of figure 4, you need to supply the path of the directory containing traces shipped with Mahimahi. If you build mahimahi 
 from source code, it will be in `/path/to/mahimahi/repo/traces` (replace /path/to/mahimahi/repo). If you build it from apt, then it should be `/usr/share/mahimahi/traces/`.
 ```
 cd syntra-experiment
-./figure4.sh /path/to/filesystem/benchmark.y4m /path/to/traces
+./figure4.sh /path/to/filesystem/benchmark.y4m /path/to/traces > figure4.out
 ```
-### Table 1
+`figure4.out` will contains the plain text of figure 4 in the paper. 
+### Table 1 (~5 hours)
 Unlike figure 4, table 1 only requires the traces shipped with `syntra-experiment`, so it only needs the path to `benchmark.y4m`.
 ```
 cd syntra-experiment
-./table1.sh /path/to/filesystem/benchmark.y4m
+./table1.sh /path/to/filesystem/benchmark.y4m > table1.out
 ```
+`table1.out` will contains the plain text of table 1 in the paper. 
