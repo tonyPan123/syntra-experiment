@@ -36,13 +36,13 @@ echo "Shallow_Buffer--------"
 
 echo "Experiment for Salsify (20 fps) ----------------------------"
 echo "Fixed_Link--------"
-./salsify-20-experiment.sh $1 $port1 ../../../traces/fixed-link ../../../traces/fixed-link fixed
+./syntra-20-experiment.sh $1 $port1 ../../../traces/fixed-link ../../../traces/fixed-link fixed
 sleep 5
 echo "Varying_Link--------"
-./salsify-20-experiment.sh $1 $port2 ../../../traces/varying-link ../../../traces/varying-link varying
+./syntra-20-experiment.sh $1 $port2 ../../../traces/varying-link ../../../traces/varying-link varying
 sleep 5
 echo "ACK_Aggregation--------"
-./salsify-20-experiment.sh $1 $port3 ../../../traces/real-jitter ../../../traces/fixed-link jitter
+./syntra-20-experiment.sh $1 $port3 ../../../traces/real-jitter ../../../traces/fixed-link jitter
 sleep 5
 popd
 
