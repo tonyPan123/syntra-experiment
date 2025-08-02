@@ -103,7 +103,7 @@ int main( int argc, char *argv[] )
     abort();
   }
 
-  if ( argc != 5 ) {
+  if ( argc != 6 ) {
     usage( argv[ 0 ] );
     return EXIT_FAILURE;
   }
@@ -255,7 +255,7 @@ int main( int argc, char *argv[] )
       return ResultType::Continue;
     }, [&]() { 
       std::chrono::duration<double, std::ratio<1,1000>> diff = (system_clock::now() - fetch_start); // in millis
-      return diff.count() >= (33) && !abr.stop_encode; 
+      return diff.count() >= (atoi(argv[ 5 ])) && !abr.stop_encode; 
     } ) 
   );
 
