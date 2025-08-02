@@ -32,7 +32,7 @@ echo "ACK_Aggregation--------"
 ./salsify-experiment.sh $1 $port3 ../../../traces/real-jitter ../../../traces/fixed-link jitter
 sleep 5
 echo "Shallow_Buffer--------"
-./salsify-experiment.sh $1 $port4 ../../../traces/fixed-link ../../../traces/real-jitter shallow
+./salsify-experiment.sh $1 $port4 ../../../traces/fixed-link ../../../traces/fixed-link shallow
 
 echo "Experiment for Salsify (20 fps) ----------------------------"
 echo "Fixed_Link--------"
@@ -57,5 +57,5 @@ echo "ACK_Aggregation--------"
 ./gcc-experiment.sh $port3 ../../traces/real-jitter ../../traces/fixed-link jitter
 sleep 5
 echo "Shallow_Buffer--------"
-./gcc-experiment.sh $port4 ../../traces/fixed-link ../../traces/real-jitter shallow
+./gcc-experiment.sh $port4 ../../traces/fixed-link ../../traces/fixed-link shallow
 popd
