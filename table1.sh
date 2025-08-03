@@ -34,7 +34,7 @@ sleep 5
 echo "Shallow_Buffer--------"
 ./salsify-experiment.sh $1 $port4 ../../../traces/fixed-link ../../../traces/fixed-link shallow
 
-echo "Experiment for Salsify (20 fps) ----------------------------"
+echo "Experiment for Syntra (20 fps) ----------------------------"
 echo "Fixed_Link--------"
 ./syntra-20-experiment.sh $1 $port1 ../../../traces/fixed-link ../../../traces/fixed-link fixed
 sleep 5
@@ -47,15 +47,16 @@ sleep 5
 popd
 
 pushd gcc/playground
+echo "Experiment for WebRTC-gcc----------------------------"
 echo "Fixed_Link--------"
-./gcc-experiment.sh $port1 ../../traces/fixed-link ../../traces/fixed-link fixed
+#./gcc-experiment.sh $port1 ../../traces/fixed-link ../../traces/fixed-link fixed
 sleep 5
 echo "Varying_Link--------"
-./gcc-experiment.sh $port2 ../../traces/varying-link ../../traces/varying-link varying
+#./gcc-experiment.sh $port2 ../../traces/varying-link ../../traces/varying-link varying
 sleep 5
 echo "ACK_Aggregation--------"
-./gcc-experiment.sh $port3 ../../traces/real-jitter ../../traces/fixed-link jitter
+#./gcc-experiment.sh $port3 ../../traces/real-jitter ../../traces/fixed-link jitter
 sleep 5
 echo "Shallow_Buffer--------"
-./gcc-experiment.sh $port4 ../../traces/fixed-link ../../traces/fixed-link shallow
+#./gcc-experiment.sh $port4 ../../traces/fixed-link ../../traces/fixed-link shallow
 popd
