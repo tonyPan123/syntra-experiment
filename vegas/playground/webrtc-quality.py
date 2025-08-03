@@ -67,8 +67,8 @@ def main(args):
 
     #print('ssim measurement count:', len(results))
     ssims = [-10 * math.log10(1 - ssim)for ssim in results]
-    print('Median ssim:', np.median(ssims))
-    print('P25 ssim:', np.percentile(ssims, 25))
+    print('Median per-frame quality (ssim):', np.median(ssims))
+    print('P25 per-frame quality (ssim):', np.percentile(ssims, 25))
 
     #for barcode, ssim_score in results.items():
     #    print(f"Barcode {barcode}: SSIM = {ssim_score:.4f}")
