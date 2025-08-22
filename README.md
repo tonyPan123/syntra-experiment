@@ -154,12 +154,14 @@ from source code, it will be in `/path/to/mahimahi/repo/traces` (replace /path/t
 ```
 cd syntra-experiment
 ./figure4.sh /path/to/filesystem/benchmark.y4m /path/to/traces > figure4.out
+python3 figure4.py figure4.out figure4.png
 ```
-`figure4.out` will contains the plain text of figure 4 in the paper. 
+`figure4.out` will contains the plain text of figure 4 in the paper and `figure4.png` will be the figure.
 ### Table 1 (~5 hours)
 Unlike figure 4, table 1 only requires the traces shipped with `syntra-experiment`, so it only needs the path to `benchmark.y4m`.
 ```
 cd syntra-experiment
 ./table1.sh /path/to/filesystem/benchmark.y4m > table1.out
+python3 table1.py table1.out 
 ```
-`table1.out` will contains the plain text of table 1 in the paper. 
+`table1.out` will contains the plain text of table 1 in the paper and `table1.py` will output the table in the same format as the paper.
